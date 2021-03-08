@@ -3,5 +3,3 @@ A creative chess engine that consists of an extension to Stockfish using general
 
 The used stockfish version can be found [here](https://github.com/official-stockfish/Stockfish).
 The chess database used by the creativity grading framework can be found [here](https://www.chessdb.cn/cloudbookc_api_en.html).
-
-author: Wolf De Wulf
