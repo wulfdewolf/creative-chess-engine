@@ -1,3 +1,0 @@
-[submodule "optimality/Stockfish"]
-	path = optimality/Stockfish
-	url = https://github.com/official-stockfish/Stockfish
