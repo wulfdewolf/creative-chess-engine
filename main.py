@@ -7,18 +7,19 @@
 #------------------------------------------------
 import chess
 import chess.engine
-from optimality import get_optimality_scores
-from creativity import get_creativity_scores
+from optimality.optimality import get_optimality_scores
+from creativity.creativity import get_creativity_scores
 
 # Initial board
 initial_board = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
 # Engine location
-engine = chess.engine.SimpleEngine.popen_uci('./Stockfish/src/stockfish')
+engine = chess.engine.SimpleEngine.popen_uci('./optimality/Stockfish/src/stockfish')
 
 
-#-------------------------------------
-#               MAIN
-#-------------------------------------
+#------------------------------------------------
+#                     MAIN
+#------------------------------------------------
 print(get_optimality_scores(initial_board, engine))
+print(get_creativity_scores(initial_board))
 engine.quit()
