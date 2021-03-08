@@ -8,22 +8,22 @@ The chess database used by the creativity grading framework can be found [here](
 ## Installation
 
 ### 1. Cloning the repository
-The Stockfish code is added as a submodule, this means that when cloning the repository you need to use following command to also pull the Stockfish repository:
+The Stockfish code is added as a submodule, this means that when cloning the repository you need to use the following command to also pull the Stockfish repository:
 ```console
 git clone --recurse-submodules git://github.com/foo/bar.git
 ```
 ### 2. Building Stockfish
 To be able to run the creative chess engine, the Stockfish engine must be built. 
-Follow the instructions Stockfish [readme](https://github.com/official-stockfish/Stockfish/blob/master/README.md).
+Follow the instructions in the Stockfish [README](https://github.com/official-stockfish/Stockfish/blob/master/README.md).
 
 ### 3. Installing requirements
-Run following command to install the required python packages:
+Run the following command to install the required python packages:
 ```console
 pip install -r requirements.txt
 ```
 
 ### 4. Running the program
-To now run the creative chess engine do:
+To now run the creative chess engine run:
 ```console
 python main.py
 ```
