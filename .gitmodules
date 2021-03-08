@@ -1,3 +1,0 @@
-[submodule "Stockfish"]
-	path = Stockfish
-	url = git@github.com:official-stockfish/Stockfish.git
