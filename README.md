@@ -29,7 +29,12 @@ pip install -r requirements.txt
 ```
 
 ### 4. Running the program
-To now run the creative chess engine run:
+To play against the engine via the terminal, navigate to the root folder of the repository and run:
 ```console
-python main.py
+python play.py
+```
+
+To let two instances of the engine play against each other for some amount of games and see what the weights they learn are, navigate to the root folder of the repository and run:
+```console
+python learn.py
 ```

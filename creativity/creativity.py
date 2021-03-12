@@ -12,18 +12,19 @@ from creativity.move import Move
   
 # Chess database api-endpoint 
 URL = "http://www.chessdb.cn/cdb.php?action=queryall&board="
+session = requests.Session()
 
 # Function that given a position gets all the known moves from the DB
 def get_known_moves(fen):
 
     # Send request to DB
-    result = requests.get(url = URL+fen).text.rstrip('\x00')
+    result = session.get(url = URL+fen).text.rstrip('\x00')
 
     # Parse and return results
-    if(result == "unknown"):
-        return []
-    else:
+    if('|' in result):
         return [Move(i.split(',')) for i in result.split('|')]
+    else:
+        return []
 
 
 # Function that gets a move from the known moves or returns false if it isn't known
@@ -45,7 +46,6 @@ def get_creativity_scores(board):
 
     # Get all of the legal moves
     legal_moves = board.legal_moves 
-    print(known_moves)
 
     # Loop over all allowed moves
     for move in legal_moves:
@@ -57,7 +57,6 @@ def get_creativity_scores(board):
 
         # 1. If the move is known and winrate < 20%: score +0.5
         if(known_move):
-            print("got here")
             if(known_move.winrate < 25.0): 
                 score += 1
 
