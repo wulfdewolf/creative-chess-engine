@@ -24,6 +24,9 @@ else:
 # Engine location
 heuristics_engine = chess.engine.SimpleEngine.popen_uci('./optimality/Stockfish/src/stockfish')
 
+# Engine UCI options
+heuristics_engine.configure({"Use NNUE": False})
+
 #------------------------------------------------
 #                    LEARNING
 #------------------------------------------------

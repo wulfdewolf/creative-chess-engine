@@ -21,6 +21,9 @@ heuristics_engine = chess.engine.SimpleEngine.popen_uci('./optimality/Stockfish/
 # Create a creative engine
 creative_engine = CreativeChessEngine(chess.WHITE, heuristics_engine)
 
+# Engine UCI options
+heuristics_engine.configure({"Use NNUE": False})
+
 # Play against it, each time asking the player for a move in terminal
 print("---------------------------------------------------------")
 print("                  NEW GAME STARTED")
