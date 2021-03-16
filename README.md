@@ -36,5 +36,5 @@ python play.py
 
 To let two instances of the engine play against each other for some amount of games and see what the weights they learn are, navigate to the root folder of the repository and run:
 ```console
-python learn.py
+python learn.py NUMBER_OF_GAMES
 ```
