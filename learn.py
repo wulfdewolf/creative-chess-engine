@@ -6,6 +6,7 @@
 #
 #------------------------------------------------
 import sys
+import signal
 import chess
 import chess.engine
 from engine import CreativeChessEngine
@@ -34,6 +35,12 @@ heuristics_engine.configure({"Use NNUE": False})
 # Create two creative engines
 creative_engine1 = CreativeChessEngine(chess.WHITE, heuristics_engine)
 creative_engine2 = CreativeChessEngine(chess.BLACK, heuristics_engine)
+
+# Set signal handler to print game PGN to file when ctrl-c pressed
+def signal_handler(sig, frame):
+    creative_engine1.pgn_to_file()
+    sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
 
 # Let them play against eachother for some given amount of games
 for i in range(N):
