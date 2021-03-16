@@ -18,11 +18,15 @@ session = requests.Session()
 def get_known_moves(fen):
 
     # Send request to DB
-    result = session.get(url = URL+fen).text.rstrip('\x00')
+    result = session.get(url = URL+fen, timeout=10).text.rstrip('\x00')
 
     # Parse and return results
     if('|' in result):
-        return [Move(i.split(',')) for i in result.split('|')]
+        moves = []
+        for i in result.split('|'):
+            if("winrate" in i):
+                moves.append(Move(i.split(',')))
+        return moves
     else:
         return []
 
@@ -38,16 +42,25 @@ def is_known_move(move, known_moves):
 def get_piece_value(piece_type):
     if(piece_type == 1):
         return 1
-    elif(piece_type == 2 | piece_type == 3):
+    elif(piece_type == 2 or piece_type == 3):
         return 3
     elif(piece_type == 4):
         return 5
     else:
         return 9
 
+def get_captured_piece_square(board, move):
+    if(board.is_en_passant(move)):
+        if(board.turn == chess.WHITE):
+            return move.to_square - 8
+        else:
+            return move.to_square + 8
+    else:
+        return move.to_square
+
 
 # Given a board calculate the creativity scores of all the legal moves
-def get_creativity_scores(board):
+def get_creativity_scores(board, move_count):
 
     # Dict with results
     scores = {}
@@ -64,9 +77,9 @@ def get_creativity_scores(board):
     # Get the values of all the pieces that can be captured
     for move in legal_moves: 
         if(board.is_capture(move)):
-
+            
             # Get captured piece value and store it in the captures list
-            captured_piece_type = board.piece_at(move.to_square).piece_type
+            captured_piece_type = board.piece_at(get_captured_piece_square(board, move)).piece_type
             captures.append(get_piece_value(captured_piece_type))
 
 
@@ -84,14 +97,14 @@ def get_creativity_scores(board):
                 score += 0.5
 
         # 2. If the move is not known: score +0.5
-        else:
-            score += 0.5
+        elif(len(known_moves) != 0):
+            score += 2
 
         # 3. If the move captures, if there is a better capture: score +0.5
         if(board.is_capture(move)):
-            captured_piece_value = get_piece_value(board.piece_at(move.to_square).piece_type)
+            captured_piece_value = get_piece_value(board.piece_at(get_captured_piece_square(board, move)).piece_type)
             if(not(all(i <= captured_piece_value for i in captures))):
-                score += 0.5
+                score += 1
 
         # Add the move and it's score to the dict
         scores[move] = score

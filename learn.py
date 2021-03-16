@@ -43,25 +43,41 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 # Let them play against eachother for some given amount of games
-for i in range(N):
+try:
+
+    for i in range(N):
     
-    while(not(creative_engine1.game_done())):
+        while(not(creative_engine1.game_done())):
 
-        # Let engine1 play
-        print("Engine1 played: ")
-        move, hybrid_score, optimality_score, creativity_score = creative_engine1.play_move()
-        print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity score = " + str(creativity_score))
-        creative_engine2.receive_move(move)
+            # Let engine1 play
+            print("Engine1 played: ")
+            move, hybrid_score, optimality_score, creativity_score = creative_engine1.play_move()
+            print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity score = " + str(creativity_score))
+            creative_engine2.receive_move(move)
 
-        # Let engine2 play
-        print("Engine2 played: ")
-        move, hybrid_score, optimality_score, creativity_score = creative_engine2.play_move()
-        print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity score = " + str(creativity_score))
-        creative_engine1.receive_move(move)
+            if(not(creative_engine1.game_done())):
+                # Let engine2 play
+                print("Engine2 played: ")
+                move, hybrid_score, optimality_score, creativity_score = creative_engine2.play_move()
+                print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity score = " + str(creativity_score))
+                creative_engine1.receive_move(move)
 
-    # When done print the result
-    print("Game is over: black - white:")
-    print(creative_engine1.game_result())
+        # When done print the result
+        print("Game is over: black - white:")
+        print(creative_engine1.game_result())
 
-# Stop the heuristics engine
-heuristics_engine.quit()
+        # Stop the heuristics engine
+        heuristics_engine.quit()
+
+except Exception as err:
+    print(err)
+    print("Connection error occurred, please check your internet connection! (game was printed to pgn file)")
+
+    # Stop the heuristics engine
+    heuristics_engine.quit()
+
+    # Still print the game to file
+    creative_engine1.pgn_to_file()
+
+    # Exit the application
+    sys.exit(-1)

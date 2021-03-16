@@ -17,7 +17,7 @@ def get_optimality_scores(board, engine):
 
     # Get scores for given board
     for el in board.legal_moves:
-        score_info = engine.analyse(board, chess.engine.Limit(time=.1), root_moves=[el])["score"]
+        score_info = engine.analyse(board, chess.engine.Limit(time=.01), root_moves=[el])["score"]
 
         # Calculate score
         score = 0.0

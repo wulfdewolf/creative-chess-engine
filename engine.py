@@ -5,6 +5,7 @@
 #             author: Wolf De Wulf
 #
 #------------------------------------------------
+import sys
 import chess
 import chess.engine
 import chess.pgn
@@ -20,7 +21,7 @@ class CreativeChessEngine:
         self.current_position = chess.Board(chess.STARTING_FEN)
         self.heuristics_engine = heuristics_engine
         self.game = chess.pgn.Game()
-        self.first_move = True
+        self.move_count = 0
 
     # Makes the engine play a move, applying it to the pgn and to the position
     def play_move(self):
@@ -28,9 +29,11 @@ class CreativeChessEngine:
         # Check if it is the engine's turn
         if(self.color == self.current_position.turn):
 
-            # Get the scores
+            # Get the optimality score
             optimality_scores = get_optimality_scores(self.current_position, self.heuristics_engine)
-            creativity_scores = get_creativity_scores(self.current_position)
+
+            # Get creativity scores, catch connection exceptions
+            creativity_scores = get_creativity_scores(self.current_position, self.move_count)
 
             # Merge the scores using the weights and sort
             hybrid_scores = self.get_hybrid_scores(optimality_scores, creativity_scores)
@@ -43,24 +46,23 @@ class CreativeChessEngine:
             chosen_move_creativity_score = creativity_scores[chosen_move]
 
             # Play it and return it
-            self.current_position.push(chosen_move)
             self.add_move_to_pgn(chosen_move)
+            self.move_count += 1
             return chosen_move, chosen_move_score, chosen_move_optimality_score, chosen_move_creativity_score
 
         else:
             return False
 
-    # Adds a given move the the curren pgn
+    # Adds a given move the the current pgn
     def add_move_to_pgn(self, move):
-        if(self.first_move):
+        if(self.move_count == 0):
             self.game_node = self.game.add_variation(move)
-            self.first_move = False
         else: 
             self.game_node = self.game_node.add_variation(move)
+        self.current_position.push(move)
 
     # Applies a given move to the position
     def receive_move(self, move):
-        self.current_position.push(move)
         self.add_move_to_pgn(move)
 
     # Checks if the game is done
@@ -90,7 +92,7 @@ class CreativeChessEngine:
         self.current_position = chess.Board(chess.STARTING_FEN)
 
         # Reset first move
-        self.first_move = True
+        self.move_count = 0
 
     # Calculats the hybrid scores from the optimality and creativity scores
     def get_hybrid_scores(self, optimality_scores, creativity_scores):
