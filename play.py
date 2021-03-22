@@ -10,8 +10,6 @@ import signal
 import chess
 import chess.engine
 from engine import CreativeChessEngine
-from optimality.optimality import get_optimality_scores
-from creativity.creativity import get_creativity_scores
 
 # Engine location
 heuristics_engine = chess.engine.SimpleEngine.popen_uci('./optimality/Stockfish/src/stockfish')
@@ -21,7 +19,10 @@ heuristics_engine = chess.engine.SimpleEngine.popen_uci('./optimality/Stockfish/
 #------------------------------------------------
 
 # Create a creative engine
-creative_engine = CreativeChessEngine(chess.WHITE, heuristics_engine)
+creative_engine = CreativeChessEngine(heuristics_engine, [1,1,1,1,1])
+
+# Prepare it to start a new game
+creative_engine.new_game("PlayerGame", chess.WHITE)
 
 # Set signal handler to print game PGN to file when ctrl-c pressed
 def signal_handler(sig, frame):
@@ -43,8 +44,8 @@ try:
 
         # Let the engine play
         print("Engine move: ")
-        move, hybrid_score, optimality_score, creativity_score = creative_engine.play_move()
-        print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity score = " + str(creativity_score))
+        move, hybrid_score, optimality_score, creativity_indices = creative_engine.play_move()
+        print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity indices = " + str([weight_index.name for weight_index in creativity_indices]))
         print("--------------------------------------------------------------------------------")
 
 
@@ -65,11 +66,14 @@ try:
     print("black - white:")
     print(creative_engine.game_result())
 
+    # Let the engine print the game to the games folder
+    creative_engine.pgn_to_file()
+
     # Stop the heuristics engine
     heuristics_engine.quit()
 
 except Exception as err:
-    print("Connection error occurred, please check your internet connection! (game was printed to pgn file)")
+    print(err)
 
     # Stop the heuristics engine
     heuristics_engine.quit()

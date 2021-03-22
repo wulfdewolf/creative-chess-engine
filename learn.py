@@ -10,8 +10,6 @@ import signal
 import chess
 import chess.engine
 from engine import CreativeChessEngine
-from optimality.optimality import get_optimality_scores
-from creativity.creativity import get_creativity_scores
 
 
 # Parse the input argument
@@ -33,8 +31,8 @@ heuristics_engine.configure({"Use NNUE": False})
 #------------------------------------------------
 
 # Create two creative engines
-creative_engine1 = CreativeChessEngine(chess.WHITE, heuristics_engine)
-creative_engine2 = CreativeChessEngine(chess.BLACK, heuristics_engine)
+creative_engine1 = CreativeChessEngine(heuristics_engine, [1,1,1,1,1], 0.1)
+creative_engine2 = CreativeChessEngine(heuristics_engine, [1,1,1,1,1], 0.1)
 
 # Set signal handler to print game PGN to file when ctrl-c pressed
 def signal_handler(sig, frame):
@@ -46,33 +44,50 @@ signal.signal(signal.SIGINT, signal_handler)
 try:
 
     for i in range(N):
+
+        # Prepare both engines to start a new game
+        creative_engine1.new_game("game" + str(i), chess.WHITE)
+        creative_engine2.new_game("game" + str(i), chess.BLACK)
     
         while(not(creative_engine1.game_done())):
 
             # Let engine1 play
             print("Engine1 played: ")
-            move, hybrid_score, optimality_score, creativity_score = creative_engine1.play_move()
-            print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity score = " + str(creativity_score))
+            move, hybrid_score, optimality_score, creativity_indices = creative_engine1.play_move()
+            print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity indices = " + str([weight_index.name for weight_index in creativity_indices]))
             creative_engine2.receive_move(move)
 
+            # If the game isn't over
             if(not(creative_engine1.game_done())):
                 # Let engine2 play
                 print("Engine2 played: ")
-                move, hybrid_score, optimality_score, creativity_score = creative_engine2.play_move()
-                print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity score = " + str(creativity_score))
+                move, hybrid_score, optimality_score, creativity_indices = creative_engine2.play_move()
+                print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity indices = " + str([weight_index.name for weight_index in creativity_indices]))
                 creative_engine1.receive_move(move)
 
-        # When done print the result
+        ### DEBUG: When done print the result
         print("Game is over: black - white:")
-        print(creative_engine1.game_result())
+        result, creativity_counters = creative_engine1.game_result()
+        print(result)
+        print("With: " + str(creativity_counters))
+        ###
 
-        # Stop the heuristics engine
-        heuristics_engine.quit()
+        # Let the engines learn from the game
+        creative_engine1.learn_from_game()
+        creative_engine2.learn_from_game()
+
+        # Let one of the engines print the game to the games folder
+        creative_engine1.pgn_to_file()
+
+        # Swap the engines
+        creative_engine1, creative_engine2 = creative_engine2, creative_engine1
+
+    # Stop the heuristics engine
+    heuristics_engine.quit()
 
 except Exception as err:
     print(err)
-    print("Connection error occurred, please check your internet connection! (game was printed to pgn file)")
-
+    
     # Stop the heuristics engine
     heuristics_engine.quit()
 

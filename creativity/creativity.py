@@ -6,10 +6,19 @@
 #
 #------------------------------------------------
 import copy
+from enum import Enum
 import chess
 import chess.engine
 import requests
 from creativity.move import Move
+
+# Indexes for weights vector --> 
+class WeightIndex(Enum):
+    UNKNOWN_MOVE = 0
+    LOW_WINRATE = 1
+    SUBOPTIMAL_CAPTURE = 2
+    SACRIFICE = 3
+    OPTIMALITY = 4
   
 # Chess database api-endpoint 
 URL = "http://www.chessdb.cn/cdb.php?action=queryall&board="
@@ -93,8 +102,8 @@ def is_sacrifice(board, move):
     # If no un-recapturable piece was found return false
     return False
 
-# Given a board calculate the creativity scores of all the legal moves
-def get_creativity_scores(board, move_count):
+# Given a board calculate the creativity indices of all the legal moves
+def get_creativity_indices(board):
 
     # Dict with results
     scores = {}
@@ -118,35 +127,31 @@ def get_creativity_scores(board, move_count):
     # Loop over all allowed moves
     for move in legal_moves:
 
-        # Creativity score
-        score = 0
+        # List that is re-used for each move to store the score-indices in
+        score_indices = []
 
+        # 1. The move is known and winrate < 25%
         known_move = is_known_move(move, known_moves)
-
-        # 1. If the move is known and winrate < 20%: score +0.5
         if(known_move):
             if(known_move.winrate < 25.0): 
-                score += 1
+                score_indices.append(WeightIndex.UNKNOWN_MOVE)
 
-        # 2. If the move is not known: score +0.5
+        # 2. The move is not known
         elif(len(known_moves) != 0):
-            score += 2
+                score_indices.append(WeightIndex.LOW_WINRATE)        
 
-        # 3. If the move captures, if there is a better capture: score +0.5
+        # 3. The move captures but there is a better capture
         if(board.is_capture(move)):
             captured_piece_value = get_piece_value(board.piece_at(get_captured_piece_square(board, move)).piece_type)
             if(not(all(i <= captured_piece_value for i in captures))):
-                score += 1
+                score_indices.append(WeightIndex.SUBOPTIMAL_CAPTURE)
 
-        # 4. If the move is a sacrifice: score +1
+        # 4. The move is a sacrifice
         elif(is_sacrifice(board, move)):
-            score += 1
+            score_indices.append(WeightIndex.SACRIFICE)
 
         # Add the move and it's score to the dict
-        scores[move] = score
-
-        # Reset score
-        score = 0
+        scores[move] = score_indices
     
     # Return final dict
     return scores
