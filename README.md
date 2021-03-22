@@ -21,7 +21,8 @@ git clone --recurse-submodules https://github.com/wulfdewolf/creative-chess-engi
 
 ### 2. Building Stockfish
 To be able to run the creative chess engine, the Stockfish engine must be built. 
-Follow the instructions in the Stockfish [README](https://github.com/official-stockfish/Stockfish/blob/master/README.md).
+As mentioned above, the repository contains a pre-built Stockfish binary and thus you do not need to build it yourself.
+If for some reason the binary does not work for your system, build it yourself by following the instructions in the Stockfish [README](https://github.com/official-stockfish/Stockfish/blob/master/README.md).
 
 ### 3. Installing requirements
 Run the following command to install the required python packages:
