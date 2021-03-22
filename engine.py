@@ -78,11 +78,11 @@ class CreativeChessEngine:
 
     # Checks if the game is done
     def game_done(self):
-        return self.current_position.is_game_over(claim_draw = True)
+        return self.current_position.is_game_over()
 
     # Returns the game result
     def game_result(self):
-        return self.current_position.result(claim_draw = True), self.creativity_counters
+        return self.current_position.result(), self.creativity_counters
 
     # Prints the pgn of the current game to the games folder
     def pgn_to_file(self):
@@ -128,8 +128,8 @@ class CreativeChessEngine:
     def learn_from_game(self):
 
         # Get game result
-        won = self.current_position.result(claim_draw = True) != ("1-0" if self.color == chess.BLACK else "0-1")
-        drew = self.current_position.result(claim_draw = True) == "1/2-1/2"
+        won = self.current_position.result() != ("1-0" if self.color == chess.BLACK else "0-1")
+        drew = self.current_position.result() == "1/2-1/2"
 
         ### OPTIMALITY
         if(not(won)):
@@ -157,8 +157,8 @@ class CreativeChessEngine:
     def print_weights(self):
         
         # Get game result
-        won = self.current_position.result(claim_draw = True) != ("1-0" if self.color == chess.BLACK else "0-1")
-        drew = self.current_position.result(claim_draw = True) == "1/2-1/2"
+        won = self.current_position.result() != ("1-0" if self.color == chess.BLACK else "0-1")
+        drew = self.current_position.result() == "1/2-1/2"
 
         with open(self.name + '_learnt.csv', 'a') as result_file:
 

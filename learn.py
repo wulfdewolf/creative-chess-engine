@@ -21,11 +21,10 @@ else:
     N = int(sys.argv[1])
 
 # Engine location
-heuristics_engine = chess.engine.SimpleEngine.popen_uci('./optimality/Stockfish/src/stockfish')
+heuristics_engine = chess.engine.SimpleEngine.popen_uci('stockfish')
 
 # Engine UCI options
 heuristics_engine.configure({"Use NNUE": False})
-heuristics_engine.configure({"Threads": 8})
 
 #------------------------------------------------
 #                    LEARNING
