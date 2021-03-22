@@ -15,10 +15,11 @@ from creativity.creativity import get_creativity_indices, WeightIndex
 # Creative chess engine class
 class CreativeChessEngine:
 
-    def __init__(self, heuristics_engine, weights, delta = 0):
+    def __init__(self, name, heuristics_engine, weights, delta = 0):
         self.heuristics_engine = heuristics_engine
         self.weights = weights
         self.delta = delta
+        self.name = name
 
     # Prepares the engine to start a new game
     def new_game(self, game_name, color):
@@ -159,7 +160,7 @@ class CreativeChessEngine:
         won = self.current_position.result(claim_draw = True) != ("1-0" if self.color == chess.BLACK else "0-1")
         drew = self.current_position.result(claim_draw = True) == "1/2-1/2"
 
-        with open('learnt.csv', 'a') as result_file:
+        with open(self.name + '_learnt.csv', 'a') as result_file:
 
             # Write weights
             for weight in self.weights:    

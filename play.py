@@ -19,7 +19,7 @@ heuristics_engine = chess.engine.SimpleEngine.popen_uci('./optimality/Stockfish/
 #------------------------------------------------
 
 # Create a creative engine
-creative_engine = CreativeChessEngine(heuristics_engine, [1,1,1,1,1])
+creative_engine = CreativeChessEngine("engine", heuristics_engine, [1,1,1,1,1])
 
 # Prepare it to start a new game
 creative_engine.new_game("PlayerGame", chess.WHITE)

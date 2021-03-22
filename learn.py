@@ -25,14 +25,15 @@ heuristics_engine = chess.engine.SimpleEngine.popen_uci('./optimality/Stockfish/
 
 # Engine UCI options
 heuristics_engine.configure({"Use NNUE": False})
+heuristics_engine.configure({"Threads": 8})
 
 #------------------------------------------------
 #                    LEARNING
 #------------------------------------------------
 
 # Create two creative engines
-creative_engine1 = CreativeChessEngine(heuristics_engine, [1,1,1,1,0.5], 0.1)
-creative_engine2 = CreativeChessEngine(heuristics_engine, [1,1,1,1,0.5], 0.1)
+creative_engine1 = CreativeChessEngine("engine1", heuristics_engine, [1,1,1,1,0.5], 0.1)
+creative_engine2 = CreativeChessEngine("engine2", heuristics_engine, [1,1,1,1,0.5], 0.1)
 
 # Set signal handler to print game PGN to file when ctrl-c pressed
 def signal_handler(sig, frame):
@@ -78,6 +79,8 @@ try:
 
         # Print the learning iteration the a .csv file
         creative_engine1.print_weights()
+        creative_engine2.print_weights()
+
 
         # Let one of the engines print the game to the games folder
         creative_engine1.pgn_to_file()
