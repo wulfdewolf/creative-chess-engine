@@ -8,7 +8,8 @@ The chess database used by the creativity grading framework can be found [here](
 ## Installation
 
 ### 1. Cloning the repository
-The Stockfish code is added as a submodule, this means that when cloning the repository you need to use the following command to also pull the Stockfish repository:
+The Stockfish code is added as a submodule. However, this repository contains a pre-build Stockfish [binary](extended-engine/binary/stockfish). This means that you do not need to also pull the Stockfish submodule to run the creative chess engine. 
+If you still want to, pull using:
 * Through ssh:
 ```console
 git clone --recurse-submodules git@github.com:wulfdewolf/creative-chess-engine.git
