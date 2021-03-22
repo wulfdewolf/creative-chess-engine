@@ -172,4 +172,4 @@ class CreativeChessEngine:
             elif(won):
                 result_file.write('win\n')
             else:
-                result.file.write('loss\n')
+                result_file.write('loss\n')

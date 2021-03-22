@@ -21,7 +21,7 @@ else:
     N = int(sys.argv[1])
 
 # Engine location
-heuristics_engine = chess.engine.SimpleEngine.popen_uci('stockfish')
+heuristics_engine = chess.engine.SimpleEngine.popen_uci('./extended-engine/binary/stockfish')
 
 # Engine UCI options
 heuristics_engine.configure({"Use NNUE": False})
@@ -79,7 +79,6 @@ try:
         # Print the learning iteration the a .csv file
         creative_engine1.print_weights()
         creative_engine2.print_weights()
-
 
         # Let one of the engines print the game to the games folder
         creative_engine1.pgn_to_file()

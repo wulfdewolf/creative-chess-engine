@@ -12,7 +12,7 @@ import chess.engine
 from engine import CreativeChessEngine
 
 # Engine location
-heuristics_engine = chess.engine.SimpleEngine.popen_uci('./optimality/Stockfish/src/stockfish')
+heuristics_engine = chess.engine.SimpleEngine.popen_uci('./extended-engine/binary/stockfish')
 
 #------------------------------------------------
 #                    Playing
