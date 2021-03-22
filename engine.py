@@ -77,11 +77,11 @@ class CreativeChessEngine:
 
     # Checks if the game is done
     def game_done(self):
-        return self.current_position.is_game_over()
+        return self.current_position.is_game_over(claim_draw = True)
 
     # Returns the game result
     def game_result(self):
-        return self.current_position.result(), self.creativity_counters
+        return self.current_position.result(claim_draw = True), self.creativity_counters
 
     # Prints the pgn of the current game to the games folder
     def pgn_to_file(self):
@@ -124,5 +124,51 @@ class CreativeChessEngine:
         return hybrid_scores
 
     # Updates the current weights by learning from the current game using an adapted version of the WoLF algorithm
-    def learn_from_game():
-        return 0
+    def learn_from_game(self):
+
+        # Get game result
+        won = self.current_position.result(claim_draw = True) != ("1-0" if self.color == chess.BLACK else "0-1")
+        drew = self.current_position.result(claim_draw = True) == "1/2-1/2"
+
+        ### OPTIMALITY
+        if(not(won)):
+            # simply add a delta if the game was lost
+            self.weights[WeightIndex.OPTIMALITY.value] += self.delta
+
+        ### CREATIVITY
+
+        ## First define the delta to use 
+        creativity_delta = self.delta
+        
+        # if the game was a draw --> 1 * -delta
+        if(drew):
+            creativity_delta = -self.delta
+        # if the game was a loss --> 2 * -delta
+        elif(not(won)):
+            creativity_delta = 2 * -self.delta
+
+        ## Now add or substract the delta to the creativity weights ONLY if a corresponding move was played during the game
+        for i in range(len(self.creativity_counters)):
+            if(self.creativity_counters[i] > 0):
+                self.weights[i] += creativity_delta 
+
+    # Print weight iteration
+    def print_weights(self):
+        
+        # Get game result
+        won = self.current_position.result(claim_draw = True) != ("1-0" if self.color == chess.BLACK else "0-1")
+        drew = self.current_position.result(claim_draw = True) == "1/2-1/2"
+
+        with open('learnt.csv', 'a') as result_file:
+
+            # Write weights
+            for weight in self.weights:    
+                result_file.write(str(weight) + ',')
+
+            # Write game result
+            if(drew):
+                result_file.write('draw\n')
+            elif(won):
+                result_file.write('win\n')
+            else:
+                result.file.write('loss\n')
