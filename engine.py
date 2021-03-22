@@ -85,7 +85,7 @@ class CreativeChessEngine:
 
     # Prints the pgn of the current game to the games folder
     def pgn_to_file(self):
-        print(self.game, file=open("games/" + self.game_name, "w"), end="\n\n")
+        print(self.game, file=open("games/" + self.game_name + ".pgn", "w"), end="\n\n")
 
     # Calculats the hybrid scores from the optimality and creativity scores
     def get_hybrid_scores(self, optimality_scores, creativity_indices):
