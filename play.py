@@ -64,7 +64,9 @@ try:
     print("                  GAME IS DONE")
     print("---------------------------------------------------------")
     print("black - white:")
-    print(creative_engine.game_result())
+    result, creativity_counters = creative_engine.game_result()
+    print(result)
+    print("With: " + str(creativity_counters))
 
     # Let the engine print the game to the games folder
     creative_engine.pgn_to_file()
