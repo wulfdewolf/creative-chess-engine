@@ -30,7 +30,7 @@ Run the following command to install the required python packages:
 pip install -r requirements.txt
 ```
 
-### 4. Running the program
+### 4. Running the application
 To play against the engine via the terminal, navigate to the root folder of the repository and run:
 ```console
 python play.py
