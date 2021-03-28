@@ -36,7 +36,7 @@ heuristics_engine2.configure({"Use NNUE": False})
 #------------------------------------------------
 
 # Create a creative chess engine and pass it one of the heuristics engines
-creative_engine = CreativeChessEngine("creative_engine", heuristics_engine1, [2,2,2,2,0.5], 0.02)
+creative_engine = CreativeChessEngine("creative_engine", heuristics_engine1, [4,2,2,2,0.5], 0.02)
 
 # Create a heuristics engine wrapper and pass it the other heuristics engine
 heuristics_engine = HeuristicsChessEngine("heuristics_engine", heuristics_engine2)
@@ -114,7 +114,7 @@ except Exception as err:
     heuristics_engine2.quit()
 
     # Still print the game to file
-    creative_engine1.pgn_to_file()
+    creative_engine.pgn_to_file()
 
     # Exit the application
     sys.exit(-1)
