@@ -9,7 +9,7 @@ import sys
 import signal
 import chess
 import chess.engine
-from engine import CreativeChessEngine
+from engine.creative_engine import CreativeChessEngine
 
 # Engine location
 heuristics_engine = chess.engine.SimpleEngine.popen_uci('./extended-engine/binary/stockfish')

@@ -9,35 +9,52 @@ import sys
 import signal
 import chess
 import chess.engine
-from engine import CreativeChessEngine
+from engine.creative_engine import CreativeChessEngine
+from engine.heuristics_engine import HeuristicsChessEngine
 
-
-# Parse the input argument
+# Parse the input arguments
 N = 0
-if(len(sys.argv) == 1):
-    print("Please give a number of games to play!")
+color_creative_engine = ""
+
+if(len(sys.argv) != 3):
+    print("python learn.py NUMBER_OF_GAMES COLOR_CREATIVE_ENGINE=BLACK|WHITE")
     exit(-1)
 else:
     N = int(sys.argv[1])
+    color_creative_engine = str(sys.argv[2])
 
-# Engine location
-heuristics_engine = chess.engine.SimpleEngine.popen_uci('./extended-engine/binary/stockfish')
+# Create two heuristics engines
+heuristics_engine1 = chess.engine.SimpleEngine.popen_uci('./extended-engine/binary/stockfish')
+heuristics_engine2 = chess.engine.SimpleEngine.popen_uci('./extended-engine/binary/stockfish')
 
 # Engine UCI options
-heuristics_engine.configure({"Use NNUE": False})
+heuristics_engine1.configure({"Use NNUE": False})
+heuristics_engine2.configure({"Use NNUE": False})
 
 #------------------------------------------------
 #                    LEARNING
 #------------------------------------------------
 
-# Create two creative engines
-creative_engine1 = CreativeChessEngine("engine1", heuristics_engine, [1,1,1,1,0.5], 0.1)
-creative_engine2 = CreativeChessEngine("engine2", heuristics_engine, [1,1,1,1,0.5], 0.1)
+# Create a creative chess engine and pass it one of the heuristics engines
+creative_engine = CreativeChessEngine("creative_engine", heuristics_engine1, [1,1,1,1,0.5], 0.1)
+
+# Create a heuristics engine wrapper and pass it the other heuristics engine
+heuristics_engine = HeuristicsChessEngine("heuristics_engine", heuristics_engine2)
 
 # Set signal handler to print game PGN to file when ctrl-c pressed
 def signal_handler(sig, frame):
-    creative_engine1.pgn_to_file()
+
+    # Print game PGN to file
+    creative_engine.pgn_to_file()
+
+    # Stop the heuristics engines
+    heuristics_engine1.quit()
+    heuristics_engine2.quit()
+
+    # Exit the application
     sys.exit(0)
+
+# Set signal handler
 signal.signal(signal.SIGINT, signal_handler)
 
 # Let them play against eachother for some given amount of games
@@ -45,55 +62,56 @@ try:
 
     for i in range(N):
 
-        # Prepare both engines to start a new game
-        creative_engine1.new_game("game" + str(i), chess.WHITE)
-        creative_engine2.new_game("game" + str(i), chess.BLACK)
-    
-        while(not(creative_engine1.game_done())):
+        # Set engine places
+        white_engine = creative_engine if color_creative_engine == "WHITE" else heuristics_engine
+        black_engine = heuristics_engine if color_creative_engine == "WHITE" else creative_engine
 
-            # Let engine1 play
-            print("Engine1 played: ")
-            move, hybrid_score, optimality_score, creativity_indices = creative_engine1.play_move()
-            print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity indices = " + str([weight_index.name for weight_index in creativity_indices]))
-            creative_engine2.receive_move(move)
+        # Prepare both engines to start a new game
+        white_engine.new_game("game" + str(i), chess.WHITE)
+        black_engine.new_game("game" + str(i), chess.BLACK)
+    
+        while(not(white_engine.game_done())):
+
+            # Let white engine play
+            #print("White played: ")
+            move, hybrid_score, optimality_score, creativity_indices = white_engine.play_move()
+            #print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity indices = " + str([weight_index.name for weight_index in creativity_indices]))
+            black_engine.receive_move(move)
 
             # If the game isn't over
-            if(not(creative_engine1.game_done())):
-                # Let engine2 play
-                print("Engine2 played: ")
-                move, hybrid_score, optimality_score, creativity_indices = creative_engine2.play_move()
-                print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity indices = " + str([weight_index.name for weight_index in creativity_indices]))
-                creative_engine1.receive_move(move)
+            if(not(white_engine.game_done())):
+                # Let black engine play
+                #print("Black played: ")
+                move, hybrid_score, optimality_score, creativity_indices = black_engine.play_move()
+                #print(move.uci() + " with hybrid score = " + str(hybrid_score) + ", optimality score = " + str(optimality_score) + " and creativity indices = " + str([weight_index.name for weight_index in creativity_indices]))
+                white_engine.receive_move(move)
 
         ### DEBUG: When done print the result
-        print("Game is over: black - white:")
-        result, creativity_counters = creative_engine1.game_result()
-        print(result)
-        print("With: " + str(creativity_counters))
+        #print("Game is over: black - white:")
+        #result, creativity_counters = creative_engine.game_result()
+        #print(result)
+        #print("With: " + str(creativity_counters))
         ###
 
-        # Let the engines learn from the game
-        creative_engine1.learn_from_game()
-        creative_engine2.learn_from_game()
+        # Let the creative engine learn from the game
+        creative_engine.learn_from_game()
 
         # Print the learning iteration the a .csv file
-        creative_engine1.print_weights()
-        creative_engine2.print_weights()
+        creative_engine.print_weights()
 
         # Let one of the engines print the game to the games folder
-        creative_engine1.pgn_to_file()
+        creative_engine.pgn_to_file()
 
-        # Swap the engines
-        creative_engine1, creative_engine2 = creative_engine2, creative_engine1
-
-    # Stop the heuristics engine
-    heuristics_engine.quit()
+    # Stop the heuristics engines
+    heuristics_engine1.quit()
+    heuristics_engine2.quit()
 
 except Exception as err:
     print(err)
     
-    # Stop the heuristics engine
-    heuristics_engine.quit()
+    # Stop the heuristics engines
+    heuristics_engine1.quit()
+    heuristics_engine2.quit()
 
     # Still print the game to file
     creative_engine1.pgn_to_file()

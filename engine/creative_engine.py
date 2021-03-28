@@ -5,30 +5,18 @@
 #             author: Wolf De Wulf
 #
 #------------------------------------------------
-import sys
 import chess
-import chess.engine
-import chess.pgn
+from engine.engine import ChessEngine
 from optimality.optimality import get_optimality_scores
 from creativity.creativity import get_creativity_indices, WeightIndex
 
 # Creative chess engine class
-class CreativeChessEngine:
+class CreativeChessEngine(ChessEngine):
 
     def __init__(self, name, heuristics_engine, weights, delta = 0):
-        self.heuristics_engine = heuristics_engine
         self.weights = weights
         self.delta = delta
-        self.name = name
-
-    # Prepares the engine to start a new game
-    def new_game(self, game_name, color):
-        self.current_position = chess.Board(chess.STARTING_FEN)
-        self.game = chess.pgn.Game()
-        self.game_name = game_name
-        self.creativity_counters = [0, 0, 0, 0]
-        self.move_count = 0
-        self.color = color
+        super(CreativeChessEngine, self).__init__(name, heuristics_engine)
 
     # Makes the engine play a move, applying it to the pgn and to the position
     def play_move(self):
@@ -63,30 +51,6 @@ class CreativeChessEngine:
 
         else:
             return False
-
-    # Adds a given move to the current pgn
-    def add_move_to_pgn(self, move):
-        if(self.move_count == 0):
-            self.game_node = self.game.add_variation(move)
-        else: 
-            self.game_node = self.game_node.add_variation(move)
-        self.current_position.push(move)
-
-    # Applies a given move to the position
-    def receive_move(self, move):
-        self.add_move_to_pgn(move)
-
-    # Checks if the game is done
-    def game_done(self):
-        return self.current_position.is_game_over(claim_draw=True)
-
-    # Returns the game result and the creativity counters
-    def game_result(self):
-        return self.current_position.result(claim_draw=True), self.creativity_counters
-
-    # Prints the pgn of the current game to the games folder
-    def pgn_to_file(self):
-        print(self.game, file=open("games/" + self.game_name + ".pgn", "w"), end="\n\n")
 
     # Calculats the hybrid scores from the optimality and creativity scores
     def get_hybrid_scores(self, optimality_scores, creativity_indices):
@@ -139,15 +103,8 @@ class CreativeChessEngine:
 
         ### CREATIVITY
 
-        ## First define the delta to use 
-        creativity_delta = self.delta
-        
-        # if the game was a draw --> 1 * -delta
-        if(drew):
-            creativity_delta = -self.delta
-        # if the game was a loss --> 2 * -delta
-        elif(not(won)):
-            creativity_delta = 2 * -self.delta
+        ## First define the delta to use: delta if we won, -delta if we lost
+        creativity_delta = -self.delta if(not(won)) else self.delta
 
         ## Now add or substract the delta to the creativity weights ONLY if a corresponding move was played during the game
         for i in range(len(self.creativity_counters)):
