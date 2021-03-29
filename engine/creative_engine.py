@@ -46,7 +46,6 @@ class CreativeChessEngine(ChessEngine):
 
             # Play it and return it
             self.add_move_to_pgn(chosen_move)
-            self.move_count += 1
             return chosen_move, chosen_move_score, chosen_move_optimality_score, chosen_move_creativity_indices
 
         else:
@@ -126,7 +125,7 @@ class CreativeChessEngine(ChessEngine):
         won = self.result != ("1-0" if self.color == chess.BLACK else "0-1")
         drew = self.result == "1/2-1/2"
 
-        with open(self.name + '_learnt.csv', 'a') as result_file:
+        with open('analysis/' + self.color + '_learnt.csv', 'a') as result_file:
 
             # Write weights
             for weight in self.weights:    
