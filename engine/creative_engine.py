@@ -92,7 +92,7 @@ class CreativeChessEngine(ChessEngine):
 
         # Store the result for later use (looking it up takes time)
         self.result = self.current_position.result(claim_draw=True)
-        won = self.result != ("1-0" if self.color == chess.BLACK else "0-1")
+        won = self.result != ("0-1" if(self.color) else "0-1")
         drew = self.result == "1/2-1/2"
 
         ### OPTIMALITY
@@ -122,10 +122,10 @@ class CreativeChessEngine(ChessEngine):
     def print_weights(self):
         
         # Get game result
-        won = self.result != ("1-0" if self.color == chess.BLACK else "0-1")
+        won = self.result != ("0-1" if(self.color) else "0-1")
         drew = self.result == "1/2-1/2"
 
-        with open('analysis/' + self.color + '_learnt.csv', 'a') as result_file:
+        with open('analysis/' + 'white' if(self.color) else 'black' + '_learnt.csv', 'a') as result_file:
 
             # Write weights
             for weight in self.weights:    
