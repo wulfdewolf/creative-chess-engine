@@ -37,6 +37,7 @@ class ChessEngine:
         else: 
             self.game_node = self.game_node.add_variation(move)
         self.current_position.push(move)
+        self.move_count += 1
 
     # Applies a given move to the position
     def receive_move(self, move):

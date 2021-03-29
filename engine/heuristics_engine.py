@@ -29,7 +29,6 @@ class HeuristicsChessEngine(ChessEngine):
 
             # Play it and return it
             self.add_move_to_pgn(chosen_move)
-            self.move_count += 1
             return chosen_move, chosen_move_score, 0, []
 
         else:
