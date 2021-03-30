@@ -87,10 +87,10 @@ try:
                 white_engine.receive_move(move)
 
         ### DEBUG: When done print the result
-        print("Game is over: white - black:")
-        result, creativity_counters = creative_engine.game_result()
-        print(result)
-        print("With: " + str(creativity_counters))
+        #print("Game is over: white - black:")
+        #result, creativity_counters = creative_engine.game_result()
+        #print(result)
+        #print("With: " + str(creativity_counters))
         ###
 
         # Let the creative engine learn from the game

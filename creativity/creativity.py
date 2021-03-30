@@ -28,7 +28,7 @@ session = requests.Session()
 def get_known_moves(fen):
 
     # Send request to DB
-    result = session.get(url = URL+fen, timeout=10).text.rstrip('\x00')
+    result = session.get(url = URL+fen, timeout=50).text.rstrip('\x00')
 
     # Parse and return results
     if('|' in result):
