@@ -21,7 +21,7 @@ def get_optimality_scores(board, engine):
 
         # Calculate score
         score = 0.0
-        if(board.turn == chess.WHITE):
+        if(board.turn):
             score = score_info.white().score(mate_score=100000)
         else:
             score = score_info.black().score(mate_score=100000)

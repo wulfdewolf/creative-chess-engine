@@ -1,3 +1,4 @@
+
 library(ggplot2)
 
 data <- read.csv("~/Documents/studies/2/CC/creative-chess-engine/analysis/creative_engine_learnt.csv", header=FALSE)
