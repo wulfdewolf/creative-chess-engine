@@ -53,4 +53,4 @@ class ChessEngine:
 
     # Prints the pgn of the current game to the games folder
     def pgn_to_file(self):
-        print(self.game, file=open("games/" + ('white' if(self.color) else 'black') + '/' + self.game_name + ".pgn", "w"), end="\n\n")
+        print(self.game, file=open("games/selfplay/" + ('white' if(self.color) else 'black') + '/' + self.game_name + ".pgn", "w"), end="\n\n")
