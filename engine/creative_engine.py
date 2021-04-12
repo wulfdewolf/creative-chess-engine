@@ -96,12 +96,10 @@ class CreativeChessEngine(ChessEngine):
         drew = self.result == "1/2-1/2"
 
         ### OPTIMALITY
-        if(not(won) & not(drew)):
-            # simply add a delta if the game was lost
-            self.weights[WeightIndex.OPTIMALITY.value] += self.delta
-        elif(won):
-            # substract a half delta if the game was won
+        if(won):
             self.weights[WeightIndex.OPTIMALITY.value] -= self.delta/2
+        elif(not(drew)):
+            self.weights[WeightIndex.OPTIMALITY.value] += self.delta
 
         ### CREATIVITY
 
