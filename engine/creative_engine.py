@@ -93,22 +93,20 @@ class CreativeChessEngine(ChessEngine):
         # Store the result for later use (looking it up takes time)
         self.result = self.current_position.result(claim_draw=True)
         won = self.result == ("1-0" if(self.color) else "0-1")
-        drew = self.result == "1/2-1/2"
+        lost = self.result == ("0-1" if(self.color) else "1-0")
 
         ### OPTIMALITY
         if(won):
             self.weights[WeightIndex.OPTIMALITY.value] -= self.delta/2
-        elif(not(drew)):
+        elif(lost):
             self.weights[WeightIndex.OPTIMALITY.value] += self.delta
 
         ### CREATIVITY
 
         ## First define the delta to use: delta if we won, -delta if we lost
-        if(drew):
-            creativity_delta = 1/2*self.delta 
-        elif(won):
+        if(won):
             creativity_delta = self.delta 
-        else:
+        elif(lost):
             creativity_delta = -self.delta
 
         ## Now add or substract the delta to the creativity weights ONLY if a corresponding move was played during the game
