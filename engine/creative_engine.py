@@ -108,6 +108,8 @@ class CreativeChessEngine(ChessEngine):
             creativity_delta = self.delta 
         elif(lost):
             creativity_delta = -self.delta
+        else:
+            return 
 
         ## Now add or substract the delta to the creativity weights ONLY if a corresponding move was played during the game
         for i in range(len(self.creativity_counters)):
