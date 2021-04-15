@@ -100,6 +100,8 @@ class CreativeChessEngine(ChessEngine):
             self.weights[WeightIndex.OPTIMALITY.value] -= self.delta/2
         elif(lost):
             self.weights[WeightIndex.OPTIMALITY.value] += self.delta
+        else:
+            self.weights[WeightIndex.OPTIMALITY.value] += self.delta/2
 
         ### CREATIVITY
 
