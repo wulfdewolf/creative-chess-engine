@@ -12,9 +12,10 @@ import chess.pgn
 # Chess engine class
 class ChessEngine:
 
-    def __init__(self, name, heuristics_engine):
+    def __init__(self, name, heuristics_engine, play_type = "otherplay"):
         self.heuristics_engine = heuristics_engine
         self.name = name
+        self.play_type = play_type
 
     # Prepares the engine to start a new game
     def new_game(self, game_name, color):
@@ -53,4 +54,4 @@ class ChessEngine:
 
     # Prints the pgn of the current game to the games folder
     def pgn_to_file(self):
-        print(self.game, file=open("games/otherplay/" + ('white' if(self.color) else 'black') + '/' + self.game_name + ".pgn", "w"), end="\n\n")
+        print(self.game, file=open("games/" + self.play_type + "/" + ('white' if(self.color) else 'black') + '/' + self.game_name + ".pgn", "w"), end="\n\n")

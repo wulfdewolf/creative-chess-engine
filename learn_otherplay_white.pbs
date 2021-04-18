@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=48:00:00
+#PBS -l pmem=50gb
+
+cd $PBS_O_WORKDIR
+
+module purge
+module load Python/3.8.6-GCCcore-10.2.0
+
+python learn_otherplay.py 1000 WHITE OTHERPLAY

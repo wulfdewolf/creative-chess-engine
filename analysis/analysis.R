@@ -1,10 +1,10 @@
 
 library(ggplot2)
 
-data <- read.csv("~/Documents/studies/2/CC/creative-chess-engine/analysis/white_learnt.csv", header=FALSE)
+data <- read.csv("~/Documents/studies/2/CC/creative-chess-engine/analysis/selfplay/white_learnt.csv", header=FALSE)
 
 # Evolution of the weights
-ggplot(data, aes(x = seq(1, 1000))) +
+ggplot(data, aes(x = seq(1, 997))) +
   geom_line(aes(y = V1, color = "Unkown move")) +
   geom_line(aes(y = V2, color = "Low winrate")) + 
   geom_line(aes(y = V3, color = "Suboptimal capture")) +
