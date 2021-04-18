@@ -20,7 +20,7 @@ if(len(sys.argv) != 4):
     exit(-1)
 else:
     N = int(sys.argv[1])
-    play_type = str(sys(argv[2]))
+    play_type = str(sys.argv[2])
 
 
 # Create two heuristics engines
