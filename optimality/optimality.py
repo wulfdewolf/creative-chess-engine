@@ -22,9 +22,9 @@ def get_optimality_scores(board, engine):
         # Calculate score
         score = 0.0
         if(board.turn):
-            score = score_info.white().score(mate_score=100000)
+            score = score_info.white().score(mate_score=1000000)
         else:
-            score = score_info.black().score(mate_score=100000)
+            score = score_info.black().score(mate_score=1000000)
         score = round(score/100,2)
 
         # Store in dict
