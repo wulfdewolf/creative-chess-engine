@@ -13,10 +13,10 @@ from creativity.creativity import get_creativity_indices, WeightIndex
 # Creative chess engine class
 class CreativeChessEngine(ChessEngine):
 
-    def __init__(self, name, heuristics_engine, weights, delta = 0):
+    def __init__(self, name, heuristics_engine, weights, delta = 0, play_type = "otherplay"):
         self.weights = weights
         self.delta = delta
-        super(CreativeChessEngine, self).__init__(name, heuristics_engine)
+        super(CreativeChessEngine, self).__init__(name, heuristics_engine, play_type)
 
     # Makes the engine play a move, applying it to the pgn and to the position
     def play_move(self):
