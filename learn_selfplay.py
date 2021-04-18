@@ -15,12 +15,11 @@ from engine.heuristics_engine import HeuristicsChessEngine
 # Parse the input arguments
 N = 0
 
-if(len(sys.argv) != 4):
-    print("python learn.py NUMBER_OF_GAMES PLAY_TYPE=OTHERPLAY|SELFPLAY")
+if(len(sys.argv) != 2):
+    print("python learn.py NUMBER_OF_GAMES")
     exit(-1)
 else:
     N = int(sys.argv[1])
-    play_type = str(sys.argv[2])
 
 
 # Create two heuristics engines
@@ -34,10 +33,10 @@ heuristics_engine.configure({"Use NNUE": False})
 #------------------------------------------------
 
 # Create a creative chess engine and pass it the heuristics engines
-creative_engine = CreativeChessEngine("creative_engine", heuristics_engine, [4,2,2,2,2], delta = 0.02, play_type = play_type)
+creative_engine = CreativeChessEngine("creative_engine", heuristics_engine, [4,2,2,2,2], delta = 0.02, play_type = "self_play")
 
 # Create another creative chess engine and pass it the heuristics engine
-creative_engine2 = CreativeChessEngine("creative_engine", heuristics_engine, [4,2,2,2,2], delta = 0.02, play_type = play_type)
+creative_engine2 = CreativeChessEngine("creative_engine", heuristics_engine, [4,2,2,2,2], delta = 0.02, play_type = "self_play")
 
 # Signal handler to print game PGN to file when ctrl-c pressed
 def signal_handler(sig, frame):
