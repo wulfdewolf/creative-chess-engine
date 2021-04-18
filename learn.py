@@ -34,10 +34,10 @@ heuristics_engine.configure({"Use NNUE": False})
 #------------------------------------------------
 
 # Create a creative chess engine and pass it one of the heuristics engines
-creative_engine = CreativeChessEngine("creative_engine", heuristics_engine, [4, 2, 2, 2, 0.5], 0.02)
+creative_engine = CreativeChessEngine("creative_engine", heuristics_engine, [3.8799999999999994,2.04,2,2.3000000000000003,6.6599999999999335], 0.02)
 
 # Create a heuristics engine wrapper and pass it the other heuristics engine
-creative_engine2 = CreativeChessEngine("creative_engine", heuristics_engine, [4, 2, 2, 2, 0.5], 0.02)
+creative_engine2 = CreativeChessEngine("creative_engine", heuristics_engine, [3.6599999999999997,1.8599999999999999,2,1.6799999999999997,7.139999999999925], 0.02)
 
 # Signal handler to print game PGN to file when ctrl-c pressed
 def signal_handler(sig, frame):
@@ -58,7 +58,7 @@ signal.signal(signal.SIGINT, signal_handler)
 # Let them play against eachother for some given amount of games
 try:
 
-    for i in range(N):
+    for i in range(862,N):
 
         # Set engine places
         white_engine = creative_engine #if color_creative_engine == "WHITE" else creative_engine2
