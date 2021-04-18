@@ -9,4 +9,4 @@ cd $PBS_O_WORKDIR
 module purge
 module load Python/3.8.6-GCCcore-10.2.0
 
-python learn_selfplay.py 1000 SELFPLAY
+python learn_selfplay.py 1000
