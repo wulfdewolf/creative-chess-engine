@@ -33,10 +33,10 @@ heuristics_engine.configure({"Use NNUE": False})
 #------------------------------------------------
 
 # Create a creative chess engine and pass it the heuristics engines
-creative_engine = CreativeChessEngine("creative_engine", heuristics_engine, [4,2,2,2,2], delta = 0.02, play_type = "self_play")
+creative_engine = CreativeChessEngine("creative_engine", heuristics_engine, [4,2,2,2,2], delta = 0.02, play_type = "selfplay")
 
 # Create another creative chess engine and pass it the heuristics engine
-creative_engine2 = CreativeChessEngine("creative_engine", heuristics_engine, [4,2,2,2,2], delta = 0.02, play_type = "self_play")
+creative_engine2 = CreativeChessEngine("creative_engine", heuristics_engine, [4,2,2,2,2], delta = 0.02, play_type = "selfplay")
 
 # Signal handler to print game PGN to file when ctrl-c pressed
 def signal_handler(sig, frame):
