@@ -60,8 +60,8 @@ try:
     for i in range(0,N):
 
         # Set engine places
-        white_engine = creative_engine if color_creative_engine == "WHITE" else heuristics_engine
-        black_engine = heuristics_engine if color_creative_engine == "WHITE" else creative_engine
+        white_engine = creative_engine if color_creative_engine == "WHITE" else heuristics_engine_wrapper
+        black_engine = heuristics_engine_wrapper if color_creative_engine == "WHITE" else creative_engine
 
         # Prepare both engines to start a new game
         white_engine.new_game("game" + str(i), chess.WHITE)

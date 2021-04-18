@@ -100,8 +100,8 @@ class CreativeChessEngine(ChessEngine):
             self.weights[WeightIndex.OPTIMALITY.value] -= self.delta/2
         elif(lost):
             self.weights[WeightIndex.OPTIMALITY.value] += self.delta
-        else:
-            self.weights[WeightIndex.OPTIMALITY.value] += self.delta/2
+        #else:
+         #   self.weights[WeightIndex.OPTIMALITY.value] += self.delta/2
 
         ### CREATIVITY
 
@@ -111,7 +111,7 @@ class CreativeChessEngine(ChessEngine):
         elif(lost):
             creativity_delta = -self.delta
         else:
-            return 
+            creativity_delta = self.delta/2 
 
         ## Now add or substract the delta to the creativity weights ONLY if a corresponding move was played during the game
         for i in range(len(self.creativity_counters)):
@@ -125,7 +125,7 @@ class CreativeChessEngine(ChessEngine):
         won = self.result == ("1-0" if(self.color) else "0-1")
         drew = self.result == "1/2-1/2"
 
-        with open('analysis/selfplay/' + ('white' if(self.color) else 'black') + '_learnt.csv', 'a') as result_file:
+        with open('analysis/otherplay/' + ('white' if(self.color) else 'black') + '_learnt.csv', 'a') as result_file:
 
             # Write weights
             for weight in self.weights:    
