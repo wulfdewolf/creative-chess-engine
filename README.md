@@ -35,8 +35,3 @@ To play against the engine via the terminal, navigate to the root folder of the 
 ```console
 python play.py
 ```
-
-To run the training file, navigate to the root folder of the repository and run:
-```console
-python learn.py NUMBER_OF_GAMES COLOR_CREATIVE_ENGINE=BLACK|WHITE
-```
