@@ -29,10 +29,6 @@ heuristics_engine = chess.engine.SimpleEngine.popen_uci('./extended-engine/binar
 # Engine UCI options
 heuristics_engine.configure({"Use NNUE": False})
 
-#------------------------------------------------
-#                    LEARNING
-#------------------------------------------------
-
 # Create a creative chess engine and pass it the heuristics engine
 creative_engine = CreativeChessEngine("creative_engine", heuristics_engine, [4,2,2,2,2], 0.02)
 
