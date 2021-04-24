@@ -33,5 +33,5 @@ pip install -r requirements.txt
 ### 4. Running the application
 To play against the engine via the terminal, navigate to the root folder of the repository and run:
 ```console
-python play.py
+python play.py ENGINE_COLOR
 ```
