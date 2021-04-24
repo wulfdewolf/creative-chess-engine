@@ -13,7 +13,7 @@ from creativity.creativity import get_creativity_indices, WeightIndex
 # Creative chess engine class
 class CreativeChessEngine(ChessEngine):
 
-    def __init__(self, name, heuristics_engine, weights, delta = 0, play_type = "otherplay"):
+    def __init__(self, name, heuristics_engine, weights, delta = 0, play_type = "humanplay"):
         self.weights = weights
         self.delta = delta
         super(CreativeChessEngine, self).__init__(name, heuristics_engine, play_type)

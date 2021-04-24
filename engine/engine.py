@@ -12,7 +12,7 @@ import chess.pgn
 # Chess engine class
 class ChessEngine:
 
-    def __init__(self, name, heuristics_engine, play_type = "otherplay"):
+    def __init__(self, name, heuristics_engine, play_type = "humanplay"):
         self.heuristics_engine = heuristics_engine
         self.name = name
         self.play_type = play_type

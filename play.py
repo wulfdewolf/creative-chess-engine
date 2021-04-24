@@ -18,13 +18,13 @@ heuristics_engine = chess.engine.SimpleEngine.popen_uci('./extended-engine/binar
 #                    Playing
 #------------------------------------------------
 
-color_engine = "WHITE"
+color_engine = "BLACK"
 
 # Create a creative engine
-creative_engine = CreativeChessEngine("engine", heuristics_engine, [3.3999999999999995,0.1799999999999985,2,-3.380000000000004,4.75] if(color_engine == "WHITE") else [2.879999999999999,0.3999999999999986,2,-6.819999999999944,6.15])
+creative_engine = CreativeChessEngine("engine", heuristics_engine, [3.9899999999999998,2.819999999999975,2,6.819999999999901,(9.209999999999884/2)] if(color_engine == "WHITE") else [3.6999999999999877,3.2199999999999664,2,6.519999999999899,(9.449999999999877/2)])
 
 # Prepare it to start a new game
-creative_engine.new_game("Pablo", chess.WHITE if(color_engine == "WHITE") else chess.BLACK)
+creative_engine.new_game("Nick", chess.WHITE if(color_engine == "WHITE") else chess.BLACK)
 
 # Set signal handler to print game PGN to file when ctrl-c pressed
 def signal_handler(sig, frame):
