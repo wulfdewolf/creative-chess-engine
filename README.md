@@ -37,9 +37,9 @@ To run the creative system and produce chess games, navigate to the root folder 
 ```console
 python main.py NUMBER_OF_GAMES
 ```
-The system can be ran in "otherplay" (one creative chess-engine versus Stockfish) by running:
+The system can be ran in "otherplay" (one creative chess-engine vs. Stockfish) by running:
 ```console
 python main_otherplay.py NUMBER_OF_GAMES
 ```
 
-The created games are written to the [games folder](./games), in [PGN](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm) format. The evaluation of the games is written to a .txt file in the [evaluation folder](./evaluation), the names will always be the same as the corresponding .pgn files.
+The created games are written to the [games folder](/games), in [PGN](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm) format. The evaluation of the games is written to a .txt file in the [evaluation folder](/evaluation), the names will always be the same as the corresponding .pgn files.
