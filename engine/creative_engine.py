@@ -1,10 +1,10 @@
-#------------------------------------------------
+#-----------------------------------------------------------------
 #
-#           A CREATIVE CHESS ENGINE
+#       Producing creative chess through chess-engine selfplay
 #
-#             author: Wolf De Wulf
+#                       author: Wolf De Wulf
 #
-#------------------------------------------------
+#-----------------------------------------------------------------
 import chess
 from engine.engine import ChessEngine
 from optimality.optimality import get_optimality_scores
@@ -13,10 +13,9 @@ from creativity.creativity import get_creativity_indices, WeightIndex
 # Creative chess engine class
 class CreativeChessEngine(ChessEngine):
 
-    def __init__(self, name, heuristics_engine, weights, delta = 0, play_type = "humanplay"):
+    def __init__(self, normal_engine, weights):
         self.weights = weights
-        self.delta = delta
-        super(CreativeChessEngine, self).__init__(name, heuristics_engine, play_type)
+        super(CreativeChessEngine, self).__init__(normal_engine)
 
     # Makes the engine play a move, applying it to the pgn and to the position
     def play_move(self):
@@ -24,8 +23,11 @@ class CreativeChessEngine(ChessEngine):
         # Check if it is the engine's turn
         if(self.color == self.current_position.turn):
 
-            # Get the optimality score
-            optimality_scores = get_optimality_scores(self.current_position, self.heuristics_engine)
+            # Get the optimality scores
+            optimality_scores = get_optimality_scores(self.current_position, self.normal_engine)
+
+            # Get the optimal move string
+            optimal_move = max(optimality_scores, key = optimality_scores.get)
 
             # Get creativity indices
             creativity_indices = get_creativity_indices(self.current_position)
@@ -40,9 +42,13 @@ class CreativeChessEngine(ChessEngine):
             chosen_move_optimality_score = optimality_scores[chosen_move]
             chosen_move_creativity_indices = creativity_indices[chosen_move]
 
+            # Increase the optimality counter
+            if(optimal_move == chosen_move):
+                self.optimality_count += 1
+
             # Increase the creativity counters
             for weight_index in chosen_move_creativity_indices:
-                self.creativity_counters[weight_index.value] += 1
+                self.creativity_counts[weight_index.value] += 1
 
             # Play it and return it
             self.add_move_to_pgn(chosen_move)
@@ -86,55 +92,3 @@ class CreativeChessEngine(ChessEngine):
 
         # Return the hybrid scores
         return hybrid_scores
-
-    # Updates the current weights by learning from the current game using an adapted version of the WoLF algorithm
-    def learn_from_game(self):
-
-        # Store the result for later use (looking it up takes time)
-        self.result = self.current_position.result(claim_draw=True)
-        won = self.result == ("1-0" if(self.color) else "0-1")
-        lost = self.result == ("0-1" if(self.color) else "1-0")
-
-        ### OPTIMALITY
-        if(won):
-            self.weights[WeightIndex.OPTIMALITY.value] -= self.delta/2
-        elif(lost):
-            self.weights[WeightIndex.OPTIMALITY.value] += self.delta
-        elif(self.play_type == "selfplay"):
-            self.weights[WeightIndex.OPTIMALITY.value] += self.delta/2
-
-        ### CREATIVITY
-
-        ## First define the delta to use: delta if we won, -delta if we lost
-        if(won):
-            creativity_delta = self.delta 
-        elif(lost):
-            creativity_delta = -self.delta
-        else:
-            creativity_delta = self.delta/2 
-
-        ## Now add or substract the delta to the creativity weights ONLY if a corresponding move was played during the game
-        for i in range(len(self.creativity_counters)):
-            if(self.creativity_counters[i] > 0):
-                self.weights[i] += creativity_delta 
-
-    # Print weight iteration
-    def print_weights(self):
-        
-        # Get game result
-        won = self.result == ("1-0" if(self.color) else "0-1")
-        drew = self.result == "1/2-1/2"
-
-        with open('analysis/' + self.play_type + '/' + ('white' if(self.color) else 'black') + '_learnt.csv', 'a') as result_file:
-
-            # Write weights
-            for weight in self.weights:    
-                result_file.write(str(weight) + ',')
-
-            # Write game result
-            if(drew):
-                result_file.write('draw\n')
-            elif(won):
-                result_file.write('win\n')
-            else:
-                result_file.write('loss\n')

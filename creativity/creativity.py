@@ -1,10 +1,10 @@
-#------------------------------------------------
+#-----------------------------------------------------------------
 #
-#           A CREATIVE CHESS ENGINE
+#       Producing creative chess through chess-engine selfplay
 #
-#             author: Wolf De Wulf
+#                       author: Wolf De Wulf
 #
-#------------------------------------------------
+#-----------------------------------------------------------------
 import copy
 from enum import Enum
 import chess
