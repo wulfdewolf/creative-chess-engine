@@ -79,8 +79,9 @@ try:
                 white_engine.receive_move(move)
 
         # When the game is done, let the engines evaluate whether it is to be accepted or not
-        optimality_threshold = 0.5
-        creativity_thresholds = [0, 0, 0, 0.2]
+        optimality_threshold = 0.4
+        creativity_thresholds = [0.05, 0.001, 0, 0.2]
+        added_weight = 0.2
         print("GAME DONE, evaluating...")
         print("engine 1:")
         optimality_ok, creativity_oks, creativity_all_ok = creative_engine.evaluate_current_game(optimality_threshold, creativity_thresholds)
@@ -99,8 +100,8 @@ try:
 
         else:
             print("REJECT")
-            creative_engine.update_weights(optimality_ok, creativity_oks, creativity_all_ok, 0.2)
-            creative_engine2.update_weights(optimality_ok2, creativity_oks2, creativity_all_ok2, 0.2)
+            creative_engine.update_weights(optimality_ok, creativity_oks, creativity_all_ok, added_weight)
+            creative_engine2.update_weights(optimality_ok2, creativity_oks2, creativity_all_ok2, added_weight)
 
     # Stop stockfish
     stockfish.quit()
