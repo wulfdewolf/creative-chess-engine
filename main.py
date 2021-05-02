@@ -107,8 +107,10 @@ def main(argv):
             logger.info("GAME DONE, evaluating...")
             logger.info("white:")
             logger.info(str([percentage for achieved, percentage, threshold in evaluation_white]))
+            logger.info(str(white_engine.weights))
             logger.info("black:")
             logger.info(str([percentage for achieved, percentage, threshold in evaluation_black]))
+            logger.info(str(black_engine.weights))
 
             # Accept
             if(all(achieved for achieved, _, _ in evaluation_white) and all(achieved for achieved, _, _ in evaluation_black)):
