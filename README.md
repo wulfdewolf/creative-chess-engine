@@ -35,6 +35,6 @@ pip install -r requirements.txt
 ### 4. Running the creative system
 To run the creative system and produce chess games, navigate to the root folder of the repository and run:
 ```console
-python main.py NUMBER_OF_GAMES
+python main.py -h
 ```
-The created games are written to the [games folder](games/), in [PGN](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm) format. The evaluation of the games is written to a .txt file in the [evaluation folder](evaluation/), the names will always be the same as the corresponding .pgn files.
+The created games are written to *folders* in the [games folder](games/), in [PGN](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm) format. The evaluation of the games is written to a .txt file in *folders* in the [evaluation folder](evaluation/), the names will always be the same as the corresponding .pgn files. The *folders* will have the name of the weights (white_black) that were used in producing the games in that folder. 
