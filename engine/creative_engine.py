@@ -20,8 +20,7 @@ class CreativeChessEngine(ChessEngine):
 
     # Creative engines keep track of counts
     def new_game(self, color):
-        self.optimality_count = 0
-        self.creativity_counts = [0, 0, 0, 0]
+        self.counts = [0, 0, 0, 0, 0]
         super(CreativeChessEngine, self).new_game(color)
 
     # Makes the engine play a move, applying it to the pgn and to the position
@@ -45,21 +44,19 @@ class CreativeChessEngine(ChessEngine):
 
             # Get the top move
             chosen_move = hybrid_scores[0][0]
-            chosen_move_score = hybrid_scores[0][1]
-            chosen_move_optimality_score = optimality_scores[chosen_move]
-            chosen_move_creativity_indices = creativity_indices[chosen_move]
+            chosen_move_creativity_indices = creativity_indices.get(chosen_move)
 
             # Increase the optimality counter
             if(optimal_move == chosen_move):
-                self.optimality_count += 1
+                self.counts[4] += 1
 
             # Increase the creativity counters
             for weight_index in chosen_move_creativity_indices:
-                self.creativity_counts[weight_index.value] += 1
+                self.counts[weight_index.value] += 1
 
             # Play it and return it
             self.add_move_to_pgn(chosen_move)
-            return chosen_move, chosen_move_score, chosen_move_optimality_score, chosen_move_creativity_indices
+            return chosen_move
 
         else:
             return False
@@ -100,42 +97,33 @@ class CreativeChessEngine(ChessEngine):
         # Return the hybrid scores
         return hybrid_scores
 
-    # Accept or reject the outputed game and change T accordingly
-    def evaluate_current_game(self, optimality_threshold, creativity_thresholds):
-
-        # Get current game optimality percentage
-        optimality_percentage = self.optimality_count / self.move_count
-
-        # Get current game creativity percentages
-        creativity_percentages = [count / self.move_count for count in self.creativity_counts]
-
-        # Check if they comply with the thresholds
-        optimality_ok = optimality_percentage >= optimality_threshold
-        creativity_oks = [creativity_percentages[i] >= creativity_thresholds[i] for i in range(len(creativity_percentages))]
-        creativity_all_ok = all(creativity_ok for creativity_ok in creativity_oks)
-
-        #DEBUG
-        print("- optimality percentage: " + str(optimality_percentage))
-        print("- creativity percentages: " + str(creativity_percentages))
-
-        return optimality_ok, creativity_oks, creativity_all_ok
+    # Return a list that contains for each of the weights: a boolean that indicates if they achieved their threshold, the actual percentage, the threshold itself
+    def evaluate_game(self, thresholds):
+        return [((count / self.move_count) >= threshold, count / self.move_count, threshold)  for count, threshold in zip(self.counts, thresholds)]
 
     # Updates weights according to the achieved tresholds --> transformational creativity
-    def update_weights(self, optimality_ok, creativity_oks, creativity_all_ok, added_weight):
+    def update_weights(self, evaluation):
 
-        if(not(optimality_ok)):
-            self.weights[WeightIndex.OPTIMALITY.value] += added_weight
+        # Loop over all the weights
+        for index, (achieved, percentage, threshold) in enumerate(evaluation):
 
-        if(not(creativity_all_ok)):
-            for i in range(len(creativity_oks)):
-                if(not(creativity_oks[i])):
-                    self.weights[i] += added_weight
+            # If the threshold was achieved
+            if(achieved):
+
+                # Substract the corresponding weight with a fraction of the added_weight 
+                self.weights[i] -= abs(percentage - threshold) * added_weight
+
+            # If the threshold was not achieved
+            else:
+                
+                # Add added_weight to the corresponding weight
+                self.weights[i] += added_weight
 
     # Prints the pgn of the current game to the games folder
-    def pgn_to_file(self, weights, weights2):
+    def pgn_to_file(self, weights_w, weights_b):
 
         # Create the corresponding folder if it does not exist already
-        foldername = './games/' + str(weights) + "_" + str(weights2)
+        foldername = './games/' + str(weights_w) + "_" + str(weights_b)
         if(not(os.path.exists(foldername))):
             os.makedirs(foldername)
 
@@ -143,15 +131,15 @@ class CreativeChessEngine(ChessEngine):
         print(self.game, file=open(foldername + '/game' + str(len(os.listdir(foldername))) + ".pgn", "w"), end="\n\n")
 
     # Prints the counts to a file in the evaluation folder
-    def counts_to_file(self, other_engine, weights, weights2):
+    def counts_to_file(self, other_engine, weights_w, weights_b):
 
         # Create the corresponding folder if it does not exist already
-        foldername = './evaluation/' + str(weights) + "_" + str(weights2)
+        foldername = './evaluation/' + str(weights_w) + "_" + str(weights_b)
         if(not(os.path.exists(foldername))):
             os.makedirs(foldername)
 
         # Print the counts to a txt file in the folder
         print(
-            str(self.optimality_count + other_engine.optimality_count) + ' ' + str(self.move_count) + '\n' + 
-            str([sum(counts) for counts in zip(self.creativity_counts, other_engine.creativity_counts)]), 
+            str(self.move_count) + '\n' + 
+            str([sum(counts) for counts in zip(self.counts, other_engine.counts)]), 
             file=open(foldername + '/game' + str(len(os.listdir(foldername))) + '.txt', "w"), end="\n\n")
