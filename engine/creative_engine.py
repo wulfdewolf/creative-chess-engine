@@ -111,13 +111,13 @@ class CreativeChessEngine(ChessEngine):
             if(achieved):
 
                 # Substract the corresponding weight with a fraction of the added_weight 
-                self.weights[i] -= abs(percentage - threshold) * added_weight
+                self.weights[index] -= abs(percentage - threshold) * added_weight
 
             # If the threshold was not achieved
             else:
                 
                 # Add added_weight to the corresponding weight
-                self.weights[i] += added_weight
+                self.weights[index] += added_weight
 
     # Prints the pgn of the current game to the games folder
     def pgn_to_file(self, weights_w, weights_b):
