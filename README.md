@@ -1,6 +1,6 @@
 # Producing creative chess through chess-engine selfplay
 This repository contains the implementation of a creative system that outputs creative chess games by running a creative chess-engine in selfplay.
-The creative chess-engine is an extension to Stockfish that consists of trying to force Stockfish to play more, human deemed creative, moves.
+The chess-engine is an extension to Stockfish that consists of trying to force Stockfish to play more, human deemed creative, moves.
 This project was made in the context of the _Computational Creativity_ course in my first master year in _computer science_ at [VUB](https://www.vub.be).
 
 The used stockfish version can be found [here](https://github.com/official-stockfish/Stockfish).
@@ -37,4 +37,4 @@ To run the creative system and produce chess games, navigate to the root folder 
 ```console
 python main.py -h
 ```
-When a game is accepted by the evaluation of the creative system, it is printed, in [PGN](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm) format, to a folder in the the [games folder](games/). That folder will always have name: [a,b,c,d,e]_[a,b,c,d,e], where the first array corresponds to the weights that were used by the white engine when playing the game, the second array is then the same for the black engine. On top of that, the [evaluation folder](evaluation/) will contain the same subfolders which will have .txt files for each played game. Those files contain the evaluation values for the games.
+When a game is accepted by the evaluation of the creative system, it is printed, in [PGN](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm) format, to a folder in the the [games folder](games/). That folder will always have name: "[a,b,c,d,e]_[a,b,c,d,e]", where the first array corresponds to the weights that were used by the white engine when playing the game, the second array is then the same for the black engine. On top of that, the [evaluation folder](evaluation/) will contain the same subfolders which will have .txt files for each played game. Those files contain the evaluation values for the games.
