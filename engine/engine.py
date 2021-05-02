@@ -20,8 +20,6 @@ class ChessEngine:
     def new_game(self, color):
         self.current_position = chess.Board(chess.STARTING_FEN)
         self.game = chess.pgn.Game()
-        self.optimality_count = 0
-        self.creativity_counts = [0, 0, 0, 0]
         self.move_count = 0
         self.color = color
 
@@ -50,30 +48,3 @@ class ChessEngine:
     # Returns the game result and the creativity counters
     def game_result(self):
         return self.current_position.result(claim_draw=True), self.creativity_counts
-
-    # Prints the pgn of the current game to the games folder
-    def pgn_to_file(self, weights, weights2):
-
-        # Create the corresponding folder if it does not exist already
-        foldername = './games/' + str(weights) + "_" + str(weights2)
-        if(not(os.path.exists(foldername))):
-            os.makedirs(foldername)
-
-        # Print the game to a pgn file in the folder
-        print(self.game, file=open(foldername + '/game' + str(len(os.listdir(foldername))) + ".pgn", "w"), end="\n\n")
-
-    # Prints the counts to a file in the evaluation folder
-    def counts_to_file(self, other_engine, weights, weights2):
-
-        # Create the corresponding folder if it does not exist already
-        foldername = './evaluation/' + str(weights) + "_" + str(weights2)
-        if(not(os.path.exists(foldername))):
-            os.makedirs(foldername)
-
-        # Print the counts to a txt file in the folder
-        print(str(
-            self.optimality_count) + ' ' + str(self.move_count) + '\n' + 
-            str(self.creativity_counts) + '\n\n' +
-            str(other_engine.optimality_count) + ' ' + str(other_engine.move_count) + '\n' +
-            str(other_engine.creativity_counts), 
-            file=open(foldername + '/game' + str(len(os.listdir(foldername))) + '.txt', "w"), end="\n\n")

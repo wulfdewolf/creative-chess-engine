@@ -78,11 +78,29 @@ try:
                 move, hybrid_score, optimality_score, creativity_indices = black_engine.play_move()
                 white_engine.receive_move(move)
 
-        # Let one of the engines print the game to the games folder
-        creative_engine.pgn_to_file(weights, weights2)
+        # When the game is done, let the engines evaluate whether it is to be accepted or not
+        optimality_threshold = 0.5
+        creativity_thresholds = [0, 0, 0, 0.2]
+        print("GAME DONE, evaluating...")
+        print("engine 1:")
+        optimality_ok, creativity_oks, creativity_all_ok = creative_engine.evaluate_current_game(optimality_threshold, creativity_thresholds)
+        print("engine 2:")
+        optimality_ok2, creativity_oks2, creativity_all_ok2 = creative_engine2.evaluate_current_game(optimality_threshold, creativity_thresholds)
 
-        # Let one of the engines print both engines' counts to the evaluation folder
-        creative_engine.counts_to_file(creative_engine2, weights, weights2)
+        # Accept or reject and update
+        if(optimality_ok and creativity_all_ok and optimality_ok2 and creativity_all_ok2):
+            print("ACCEPT")
+
+            # Let one of the engines print the creative game to the games folder
+            creative_engine.pgn_to_file(weights, weights2)
+
+            # Let one of the engines print both engines' counts to the evaluation folder
+            creative_engine.counts_to_file(creative_engine2, weights, weights2)
+
+        else:
+            print("REJECT")
+            creative_engine.update_weights(optimality_ok, creativity_oks, creativity_all_ok, 0.2)
+            creative_engine2.update_weights(optimality_ok2, creativity_oks2, creativity_all_ok2, 0.2)
 
     # Stop stockfish
     stockfish.quit()
