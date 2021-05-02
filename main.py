@@ -6,11 +6,16 @@
 #
 #-----------------------------------------------------------------
 import sys, getopt
+import logging
 import signal
 import chess
 import chess.engine
 from engine.creative_engine import CreativeChessEngine
 from engine.normal_engine import NormalChessEngine
+
+# Setup logger
+logging.basicConfig(filename='main.log', encoding='utf-8', level=logging.DEBUG)
+
 
 # Runs the creative system
 def main(argv):
@@ -97,15 +102,15 @@ def main(argv):
             # When the game is done, let the engines evaluate whether it is to be accepted or not
             evaluation_white = white_engine.evaluate_game(thresholds)
             evaluation_black = black_engine.evaluate_game(thresholds)
-            print("GAME DONE, evaluating...")
-            print("white:")
-            print(str([percentage for achieved, percentage, threshold in evaluation_white]))
-            print("black:")
-            print(str([percentage for achieved, percentage, threshold in evaluation_black]))
+            logging.info("GAME DONE, evaluating...")
+            logging("white:")
+            logging.info(str([percentage for achieved, percentage, threshold in evaluation_white]))
+            logging.info("black:")
+            logging.info(str([percentage for achieved, percentage, threshold in evaluation_black]))
 
             # Accept
             if(all(achieved for achieved, _, _ in evaluation_white) and all(achieved for achieved, _, _ in evaluation_black)):
-                print("ACCEPT")
+                logging.info("ACCEPT")
 
                 # Let one of the engines print the creative game to the games folder
                 white_engine.pgn_to_file(weights_w, weights_b)
@@ -115,7 +120,7 @@ def main(argv):
 
             # Or reject and update
             else:
-                print("REJECT")
+                logging.info("REJECT")
                 white_engine.update_weights(evaluation_white, added_weight)
                 black_engine.update_weights(evaluation_black, added_weight)
 
@@ -123,7 +128,7 @@ def main(argv):
         stockfish.quit()
 
     except Exception as err:
-        print(err)
+        logging.error(err)
     
         # Stop stockfish
         stockfish.quit()
