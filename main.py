@@ -14,12 +14,15 @@ from engine.creative_engine import CreativeChessEngine
 from engine.normal_engine import NormalChessEngine
 
 # Setup logger
-logging.basicConfig(filename='main.log', encoding='utf-8', level=logging.DEBUG)
+logger = logging.getLogger('main')
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.FileHandler('main.log'))
 
 
 # Runs the creative system
 def main(argv):
 
+    logger.info("kaka")
     # Define the weights that the engines will use: [c1, c2, c3, c4, o]
     weights_w = [4, 3, 2, 2, 2]
     weights_b = [4, 3, 2, 2, 2]
@@ -102,15 +105,15 @@ def main(argv):
             # When the game is done, let the engines evaluate whether it is to be accepted or not
             evaluation_white = white_engine.evaluate_game(thresholds)
             evaluation_black = black_engine.evaluate_game(thresholds)
-            logging.info("GAME DONE, evaluating...")
-            logging("white:")
-            logging.info(str([percentage for achieved, percentage, threshold in evaluation_white]))
-            logging.info("black:")
-            logging.info(str([percentage for achieved, percentage, threshold in evaluation_black]))
+            logger.info("GAME DONE, evaluating...")
+            logger.info("white:")
+            logger.info(str([percentage for achieved, percentage, threshold in evaluation_white]))
+            logger.info("black:")
+            logger.info(str([percentage for achieved, percentage, threshold in evaluation_black]))
 
             # Accept
             if(all(achieved for achieved, _, _ in evaluation_white) and all(achieved for achieved, _, _ in evaluation_black)):
-                logging.info("ACCEPT")
+                logger.info("ACCEPT")
 
                 # Let one of the engines print the creative game to the games folder
                 white_engine.pgn_to_file(weights_w, weights_b)
@@ -120,7 +123,7 @@ def main(argv):
 
             # Or reject and update
             else:
-                logging.info("REJECT")
+                logger.info("REJECT")
                 white_engine.update_weights(evaluation_white, added_weight)
                 black_engine.update_weights(evaluation_black, added_weight)
 
@@ -128,7 +131,7 @@ def main(argv):
         stockfish.quit()
 
     except Exception as err:
-        logging.error(err)
+        logger.error(err)
     
         # Stop stockfish
         stockfish.quit()
