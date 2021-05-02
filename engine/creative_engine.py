@@ -102,7 +102,7 @@ class CreativeChessEngine(ChessEngine):
         return [((count / self.move_count) >= threshold, count / self.move_count, threshold)  for count, threshold in zip(self.counts, thresholds)]
 
     # Updates weights according to the achieved tresholds --> transformational creativity
-    def update_weights(self, evaluation):
+    def update_weights(self, evaluation, added_weight):
 
         # Loop over all the weights
         for index, (achieved, percentage, threshold) in enumerate(evaluation):
