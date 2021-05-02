@@ -22,7 +22,6 @@ logger.addHandler(logging.FileHandler('main.log'))
 # Runs the creative system
 def main(argv):
 
-    logger.info("kaka")
     # Define the weights that the engines will use: [c1, c2, c3, c4, o]
     weights_w = [4, 3, 2, 2, 2]
     weights_b = [4, 3, 2, 2, 2]
