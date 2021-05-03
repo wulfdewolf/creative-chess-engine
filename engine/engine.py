@@ -8,7 +8,6 @@
 import abc
 import chess
 import chess.pgn
-import os
 
 # Chess engine class
 class ChessEngine:
