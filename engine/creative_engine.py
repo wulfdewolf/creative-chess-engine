@@ -6,17 +6,16 @@
 #
 #-----------------------------------------------------------------
 import chess
-import os
 from engine.engine import ChessEngine
-from optimality.optimality import get_optimality_scores
-from creativity.creativity import get_creativity_indices, WeightIndex
+from engine.optimality.optimality import get_optimality_scores
+from engine.creativity.creativity import get_creativity_indices, WeightIndex
 
 # Creative chess engine class
 class CreativeChessEngine(ChessEngine):
 
-    def __init__(self, normal_engine, weights):
+    def __init__(self, inner_engine, weights):
         self.weights = weights
-        super(CreativeChessEngine, self).__init__(normal_engine)
+        super(CreativeChessEngine, self).__init__(inner_engine)
 
     # Creative engines keep track of counts
     def new_game(self, color):
@@ -30,7 +29,7 @@ class CreativeChessEngine(ChessEngine):
         if(self.color == self.current_position.turn):
 
             # Get the optimality scores
-            optimality_scores = get_optimality_scores(self.current_position, self.normal_engine)
+            optimality_scores = get_optimality_scores(self.current_position, self.inner_engine)
 
             # Get the optimal move string
             optimal_move = max(optimality_scores, key = optimality_scores.get)
@@ -97,10 +96,6 @@ class CreativeChessEngine(ChessEngine):
         # Return the hybrid scores
         return hybrid_scores
 
-    # Return a list that contains for each of the weights: a boolean that indicates if they achieved their threshold, the actual percentage, the threshold itself
-    def evaluate_game(self, thresholds):
-        return [((count / self.move_count) >= threshold, count / self.move_count, threshold)  for count, threshold in zip(self.counts, thresholds)]
-
     # Updates weights according to the achieved tresholds --> transformational creativity
     def update_weights(self, evaluation, added_weight):
 
@@ -111,35 +106,10 @@ class CreativeChessEngine(ChessEngine):
             if(achieved):
 
                 # Substract the corresponding weight with a fraction of the added_weight 
-                self.weights[index] -= abs(percentage - threshold) * added_weight
+                self.weights[index] -= (percentage - threshold) * added_weight
 
             # If the threshold was not achieved
             else:
                 
                 # Add added_weight to the corresponding weight
                 self.weights[index] += added_weight
-
-    # Prints the pgn of the current game to the games folder
-    def pgn_to_file(self, other_engine):
-
-        # Create the corresponding folder if it does not exist already
-        foldername = './games/' + str(self.weights) + "_" + str(other_engine.weights)
-        if(not(os.path.exists(foldername))):
-            os.makedirs(foldername)
-
-        # Print the game to a pgn file in the folder
-        print(self.game, file=open(foldername + '/game' + str(len(os.listdir(foldername))) + ".pgn", "w"), end="\n\n")
-
-    # Prints the counts to a file in the evaluation folder
-    def counts_to_file(self, other_engine):
-
-        # Create the corresponding folder if it does not exist already
-        foldername = './evaluation/' + str(self.weights) + "_" + str(other_engine.weights)
-        if(not(os.path.exists(foldername))):
-            os.makedirs(foldername)
-
-        # Print the counts to a txt file in the folder
-        print(
-            str(self.move_count) + '\n' + 
-            str([sum(counts) for counts in zip(self.counts, other_engine.counts)]), 
-            file=open(foldername + '/game' + str(len(os.listdir(foldername))) + '.txt', "w"), end="\n\n")

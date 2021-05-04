@@ -12,8 +12,8 @@ import chess.pgn
 # Chess engine class
 class ChessEngine:
 
-    def __init__(self, normal_engine):
-        self.normal_engine = normal_engine
+    def __init__(self, inner_engine):
+        self.inner_engine = inner_engine
 
     # Prepares the engine to start a new game
     def new_game(self, color):
@@ -43,7 +43,3 @@ class ChessEngine:
     # Checks if the game is done
     def game_done(self):
         return self.current_position.is_game_over(claim_draw=True)
-
-    # Returns the game result and the creativity counters
-    def game_result(self):
-        return self.current_position.result(claim_draw=True), self.creativity_counts

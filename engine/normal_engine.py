@@ -7,8 +7,8 @@
 #-----------------------------------------------------------------
 import chess
 from engine.engine import ChessEngine
-from optimality.optimality import get_optimality_scores
-from creativity.creativity import get_creativity_indices, WeightIndex
+from engine.optimality.optimality import get_optimality_scores
+from engine.creativity.creativity import get_creativity_indices, WeightIndex
 
 # Normal chess engine class
 class NormalChessEngine(ChessEngine):

@@ -10,7 +10,7 @@ from enum import Enum
 import chess
 import chess.engine
 import requests
-from creativity.move import Move
+from engine.creativity.move import Move
 
 # Indexes for weights vector --> 
 class WeightIndex(Enum):
