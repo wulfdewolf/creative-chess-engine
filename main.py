@@ -17,13 +17,17 @@ logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.FileHandler('main.log'))
 
 # Help string
-help = """python main.py\n
-optional parameters:\n
--w | --initial_weights_white        The weights with which the white engine starts, default: [10,10,2,2,2]\n
--b | --initial_weights_black        The weights with which the black engine starts, default: [10,10,2,2,2]\n
--N                                  The number of games that the system should run, default: 200\n
--t | --thresholds                   The evaluation thresholds, default: [0.02,0.0001,0,0.05,0.4]\n
--a | --added_weight                 The theta parameter that should be added to the weights when a game is not accepted, default: 0.2\n"""
+help = """
+Usage:  python main.py [OPTIONS]
+
+A creative system that produces creative chess games through chess-engine selfplay.
+
+Options:
+-w, --initial_weights_white    Initial weights for the white engine, default: [10,10,2,2,2]
+-b, --initial_weights_black    Initial weights for the black engine, default: [10,10,2,2,2]
+-N                             Number of games the system should run, default: 200
+-t, --thresholds               Evaluation thresholds, default: [0.02,0.0001,0,0.05,0.4]
+-a, --added_weight             Theta parameter that is added to the engine weights when a game is rejected, default: 0.2\n"""
 
 
 # Runs the creative system
