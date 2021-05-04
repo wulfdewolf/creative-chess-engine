@@ -1,3 +1,0 @@
-[submodule "extended-engine/Stockfish"]
-	path = extended-engine/Stockfish
-	url = https://github.com/official-stockfish/Stockfish
