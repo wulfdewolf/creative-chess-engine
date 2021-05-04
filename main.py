@@ -84,7 +84,7 @@ def main(argv):
     black_engine = CreativeChessEngine(stockfish, initial_weights_b)
 
     # Creative Chess Producer
-    ccp = CreativeChessProducer(white_engine, black_engine, thresholds, logger)
+    ccp = CreativeChessProducer(white_engine, black_engine, thresholds, added_weight, logger)
 
     try:
         # Let the engines play against each other for N games

@@ -12,10 +12,11 @@ import os
 # Creative Chess Producer class
 class CreativeChessProducer:
 
-    def __init__(self, white_engine, black_engine, thresholds, logger):
+    def __init__(self, white_engine, black_engine, thresholds, added_weight, logger):
         self.white_engine = white_engine
         self.black_engine = black_engine
         self.thresholds = thresholds
+        self.added_weight = added_weight
         self.logger = logger
 
     # Lets the two engines play a complete game
@@ -71,8 +72,8 @@ class CreativeChessProducer:
                 # Or reject and update
                 else:
                     self.logger.info("REJECT")
-                    self.white_engine.update_weights(evaluation_white, added_weight)
-                    self.black_engine.update_weights(evaluation_black, added_weight)
+                    self.white_engine.update_weights(evaluation_white, self.added_weight)
+                    self.black_engine.update_weights(evaluation_black, self.added_weight)
                 
                 # Next iteration
                 i += 1

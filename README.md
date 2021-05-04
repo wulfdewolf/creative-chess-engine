@@ -37,5 +37,5 @@ To run the creative system and produce chess games, navigate to the root folder 
 ```console
 python main.py -h
 ```
-When a game is accepted by the evaluation of the creative system, it is printed, in [PGN](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm) format, to a folder in the the [games folder](games/). That folder will always have name: "[a,b,c,d,e]_[a,b,c,d,e]", where the first array corresponds to the weights that were used by the white engine when playing the game, the second array is then the same for the black engine. On top of that, the [evaluation folder](evaluation/) will contain the same subfolders which will have .txt files for each played game. Those files contain the evaluation values for the games. 
-The progress of the system can be tracked, while running, in the "main.log" file. 
+When a game is accepted by the internal evaluation of the creative system, it is printed, in [PGN](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm) format, to a folder in the the [games folder](games/). This folder will always have name: "[c1,c2,c3,c4,0]_[c1,c2,c3,c4,o]", where the first array corresponds to the weights that were used by the white engine when playing the game, the second array is then the same for the black engine. On top of that, the [evaluation folder](evaluation/) will contain the same subfolders which will have .txt files for each played game. Those files contain the evaluation values for the games. 
+While the system is running its progress can be tracked in the **main.log** file. 
