@@ -120,10 +120,10 @@ class CreativeChessEngine(ChessEngine):
                 self.weights[index] += added_weight
 
     # Prints the pgn of the current game to the games folder
-    def pgn_to_file(self, weights_w, weights_b):
+    def pgn_to_file(self, other_engine):
 
         # Create the corresponding folder if it does not exist already
-        foldername = './games/' + str(weights_w) + "_" + str(weights_b)
+        foldername = './games/' + str(self.weights) + "_" + str(other_engine.weights)
         if(not(os.path.exists(foldername))):
             os.makedirs(foldername)
 
@@ -131,10 +131,10 @@ class CreativeChessEngine(ChessEngine):
         print(self.game, file=open(foldername + '/game' + str(len(os.listdir(foldername))) + ".pgn", "w"), end="\n\n")
 
     # Prints the counts to a file in the evaluation folder
-    def counts_to_file(self, other_engine, weights_w, weights_b):
+    def counts_to_file(self, other_engine):
 
         # Create the corresponding folder if it does not exist already
-        foldername = './evaluation/' + str(weights_w) + "_" + str(weights_b)
+        foldername = './evaluation/' + str(self.weights) + "_" + str(other_engine.weights)
         if(not(os.path.exists(foldername))):
             os.makedirs(foldername)
 

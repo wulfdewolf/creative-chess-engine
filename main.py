@@ -23,8 +23,8 @@ logger.addHandler(logging.FileHandler('main.log'))
 def main(argv):
 
     # Define the weights that the engines will use: [c1, c2, c3, c4, o]
-    weights_w = [10, 10, 2, 2, 2]
-    weights_b = [10, 10, 2, 2, 2]
+    initial_weights_w = [10, 10, 2, 2, 2]
+    initial_weights_b = [10, 10, 2, 2, 2]
 
     # Define the evaluation thresholds: [c1, c2, c3, c4, o]
     thresholds = [0.02, 0.0001, 0, 0.05, 0.4]
@@ -37,7 +37,7 @@ def main(argv):
 
     # Read optional input parameters
     try:
-        opts, args = getopt.getopt(argv,"hNw:b:t:a:",["weights_white=","weights_black=","thresholds=","added_weight="])
+        opts, args = getopt.getopt(argv,"hNw:b:t:a:",["initial_weights_white=","initial_weights_black=","thresholds=","added_weight="])
     except getopt.GetoptError:
         print('python main.py -ww [1,2,3,4,5] -wb [1,2,3,4,5] -t [1,2,3,4,5] -aw 1')
         sys.exit(2)
@@ -48,10 +48,10 @@ def main(argv):
            sys.exit()
        elif opt == '-N':
            N = int(arg)
-       elif opt in ('-w', "--weights_white"):
-           weights_w = [float(x) for x in arg.strip('[]').split(',')]
-       elif opt in ('-b', "--weights_black"):
-           weights_b = [float(x) for x in arg.strip('[]').split(',')]
+       elif opt in ('-w', "--initial_weights_white"):
+           initial_weights_w = [float(x) for x in arg.strip('[]').split(',')]
+       elif opt in ('-b', "--initial_weights_black"):
+           initial_weights_b = [float(x) for x in arg.strip('[]').split(',')]
        elif opt in ("-t", "--thresholds"):
            thresholds = [float(x) for x in arg.strip('[]').split(',')]
        elif opt in ("-a", "--added_weight"):
@@ -61,16 +61,16 @@ def main(argv):
     stockfish = chess.engine.SimpleEngine.popen_uci('./extended-engine/binary/stockfish')
     
     # Create the creative chess engine that will play as white and pass it the Stockfish instance
-    white_engine = CreativeChessEngine(stockfish, weights_w)
+    white_engine = CreativeChessEngine(stockfish, initial_weights_w)
 
     # Create the creative chess engine that will play as black and pass it the Stockfish instance
-    black_engine = CreativeChessEngine(stockfish, weights_b)
+    black_engine = CreativeChessEngine(stockfish, initial_weights_b)
 
     # Signal handler to print game PGN to file when ctrl-c pressed
     def signal_handler(sig, frame):
 
         # Print game PGN to file
-        white_engine.pgn_to_file(weights_w, weights_b)
+        white_engine.pgn_to_file(black_engine)
 
         # Stop stockfish
         stockfish.quit()
@@ -118,10 +118,10 @@ def main(argv):
                 logger.info("ACCEPT")
 
                 # Let one of the engines print the creative game to the games folder
-                white_engine.pgn_to_file(weights_w, weights_b)
+                white_engine.pgn_to_file(black_engine)
 
                 # Let one of the engines print both engines' counts to the evaluation folder
-                white_engine.counts_to_file(black_engine, weights_w, weights_b)
+                white_engine.counts_to_file(black_engine)
 
             # Or reject and update
             else:
@@ -139,7 +139,7 @@ def main(argv):
         stockfish.quit()
 
         # Still print the game to file
-        white_engine.pgn_to_file(weights_w, weights_b)
+        white_engine.pgn_to_file(black_engine)
 
         # Exit the application
         sys.exit(-1)
