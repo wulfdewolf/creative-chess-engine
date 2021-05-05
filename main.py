@@ -21,10 +21,10 @@ def main(argv):
 
     # Engine weights: [c1, c2, c3, c4, o]
     initial_weights_w = [10, 10, 2, 2, 2]
-    initial_weights_b = [10, 10, 2, 2, 2]
+    initial_weights_b = [11, 11, 2, 2, 2]
 
     # Evaluation thresholds: [c1, c2, c3, c4, o]
-    thresholds = [0.02, 0.001, 0, 0.05, 0.8]
+    thresholds = [0.05, 0.01, 0, 0.05, 0.8]
 
     # Transformational creativity added weight
     added_weight = 0.2
