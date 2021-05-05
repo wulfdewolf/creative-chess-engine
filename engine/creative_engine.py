@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------
 #
-#       Producing creative chess through chess-engine selfplay
+#       Producing creative chess through chess engine selfplay
 #
 #                       author: Wolf De Wulf
 #

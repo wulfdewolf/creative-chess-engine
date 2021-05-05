@@ -14,11 +14,11 @@ The Stockfish code is added as a submodule. However, this repository contains a 
 If you still want to, you can by pulling:
 * Through ssh:
 ```console
-git clone --recurse-submodules git@github.com:wulfdewolf/creative-chess-engine.git
+git clone --recurse-submodules git@github.com:wulfdewolf/creative-chess engine.git
 ```
 * Through https:
 ```console
-git clone --recurse-submodules https://github.com/wulfdewolf/creative-chess-engine.git
+git clone --recurse-submodules https://github.com/wulfdewolf/creative-chess engine.git
 ```
 
 ### 2. Building Stockfish

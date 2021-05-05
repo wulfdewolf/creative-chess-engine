@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------
 #
-#       Producing creative chess through chess-engine selfplay
+#       Producing creative chess through chess engine selfplay
 #
 #                       author: Wolf De Wulf
 #
@@ -21,6 +21,7 @@ class ChessEngine:
         self.game = chess.pgn.Game()
         self.move_count = 0
         self.color = color
+        delattr(self, 'game_node')
 
     # Makes the engine play a move, applying it to the pgn and to the position
     def play_move(self):
