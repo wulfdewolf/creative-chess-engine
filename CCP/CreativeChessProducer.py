@@ -86,7 +86,7 @@ class CreativeChessProducer:
     def evaluate_game(self):
 
         # Get move count from one of the engines (always the same)
-        move_count = self.white_engine.move_count
+        move_count = self.white_engine.move_count / 2
 
         # Calculate evaluations
         white_evaluation = [((count / move_count) >= threshold, count / move_count, threshold)  for count, threshold in zip(self.white_engine.counts, self.thresholds)]
@@ -117,6 +117,6 @@ class CreativeChessProducer:
 
         # Print the counts to a txt file in the folder
         print(
-            str(2*self.white_engine.move_count) + '\n' + 
+            str(self.white_engine.move_count) + '\n' + 
             str([sum(counts) for counts in zip(self.white_engine.counts, self.black_engine.counts)]), 
             file=open(foldername + '/game' + str(len(os.listdir(foldername))) + '.txt', "w"), end="\n\n")
