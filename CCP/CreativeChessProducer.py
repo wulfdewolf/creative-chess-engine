@@ -30,14 +30,14 @@ class CreativeChessProducer:
 
             # Let white engine play
             move = self.white_engine.play_move()
-            self.black_engine.receive_move(move)
+            self.black_engine.register_move(move)
 
             # If the game isn't over
             if(not(self.white_engine.game_done())):
 
                 # Let black engine play
                 move = self.black_engine.play_move()
-                self.white_engine.receive_move(move)
+                self.white_engine.register_move(move)
 
     # Run the CCP for a given number of games
     def run(self, N):
@@ -49,6 +49,7 @@ class CreativeChessProducer:
 
                 # When the game is done, let the engines evaluate whether it is to be accepted or not
                 evaluation_white, evaluation_black = self.evaluate_game()
+                self.logger.info("-----------------------------------------")
                 self.logger.info("GAME DONE, evaluating...")
                 self.logger.info("white:")
                 self.logger.info(str([percentage for achieved, percentage, threshold in evaluation_white]))
@@ -63,11 +64,8 @@ class CreativeChessProducer:
 
                     self.logger.info("ACCEPT")
 
-                    # Print the creative game to the games folder
-                    self.pgn_to_file()
-
-                    # Print both engines' evaluations to the evaluation folder
-                    self.evaluation_to_file()
+                    # Store the accepted game
+                    self.store_game()
 
                 # Or reject and update
                 else:
@@ -76,6 +74,7 @@ class CreativeChessProducer:
                     self.black_engine.update_weights(evaluation_black, self.added_weight)
                 
                 # Next iteration
+                self.logger.info("-----------------------------------------")
                 i += 1
 
             # If a connection error occured, act as if the game never happened
@@ -86,7 +85,7 @@ class CreativeChessProducer:
     def evaluate_game(self):
 
         # Get move count from one of the engines (always the same)
-        move_count = self.white_engine.move_count / 2
+        move_count = self.white_engine.move_count
 
         # Calculate evaluations
         white_evaluation = [((count / move_count) >= threshold, count / move_count, threshold)  for count, threshold in zip(self.white_engine.counts, self.thresholds)]
@@ -95,28 +94,19 @@ class CreativeChessProducer:
         return white_evaluation, black_evaluation
 
 
-    # Prints the pgn of the current game to the games folder
-    def pgn_to_file(self):
+    # Stores an accepted game with its evaluation values to the games folder
+    def store_game(self):
 
-        # Create the corresponding folder if it does not exist already
-        foldername = './games/' + str(self.white_engine.weights) + "_" + str(self.black_engine.weights)
-        if(not(os.path.exists(foldername))):
-            os.makedirs(foldername)
+        # Create a folder for the game
+        foldername = './games/game' + str(len(os.listdir('./games'))) 
+        os.makedirs(foldername)
 
         # Print the game to a pgn file in the folder
-        print(self.white_engine.game, file=open(foldername + '/game' + str(len(os.listdir(foldername))) + ".pgn", "w"), end="\n\n")
+        print(self.white_engine.game, file=open(foldername + "/game.pgn", "w"), end="\n\n")
 
-
-    # Prints the counts to a file in the evaluation folder
-    def evaluation_to_file(self):
-
-        # Create the corresponding folder if it does not exist already
-        foldername = './evaluation/' + str(self.white_engine.weights) + "_" + str(self.black_engine.weights)
-        if(not(os.path.exists(foldername))):
-            os.makedirs(foldername)
-
-        # Print the counts to a txt file in the folder
+        # Print the evaluation values to a txt file in the folder
         print(
-            str(self.white_engine.move_count) + '\n' + 
-            str([sum(counts) for counts in zip(self.white_engine.counts, self.black_engine.counts)]), 
-            file=open(foldername + '/game' + str(len(os.listdir(foldername))) + '.txt', "w"), end="\n\n")
+            "Total number of moves: " + str(self.white_engine.move_count) + '\n' + 
+            "White move counts:     " + str(self.white_engine.counts) + '\n' +
+            "Black move counts:     " + str(self.black_engine.counts), 
+            file=open(foldername + "/evaluation.txt", "w"), end="\n\n")

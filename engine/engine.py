@@ -37,24 +37,20 @@ class ChessEngine:
             chosen_move_score = optimality_scores[0][1]
 
             # Play it and return it
-            self.add_move_to_pgn(chosen_move)
+            self.move_count += 1
+            self.register_move(chosen_move)
             return chosen_move, chosen_move_score, 0, []
 
         else:
             return False
 
     # Adds a given move to the current pgn
-    def add_move_to_pgn(self, move):
+    def register_move(self, move):
         if(self.move_count == 0):
             self.game_node = self.game.add_variation(move)
         else: 
             self.game_node = self.game_node.add_variation(move)
         self.current_position.push(move)
-        self.move_count += 1
-
-    # Applies a given move to the position
-    def receive_move(self, move):
-        self.add_move_to_pgn(move)
 
     # Checks if the game is done
     def game_done(self):
