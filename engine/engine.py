@@ -46,10 +46,10 @@ class ChessEngine:
 
     # Adds a given move to the current pgn
     def register_move(self, move):
-        if(self.move_count == 0):
-            self.game_node = self.game.add_variation(move)
-        else: 
+        if(hasattr(self, 'game_node')):
             self.game_node = self.game_node.add_variation(move)
+        else: 
+            self.game_node = self.game.add_variation(move)
         self.current_position.push(move)
 
     # Checks if the game is done
