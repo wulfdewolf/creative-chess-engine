@@ -1,6 +1,6 @@
-# Producing creative chess through chess-engine selfplay
-This repository contains the implementation of a creative system that outputs creative chess games by running a creative chess-engine in selfplay.
-The chess-engine is an extension to Stockfish that consists of trying to force Stockfish to play more, human deemed creative, moves.
+# Producing creative chess through chess engine selfplay
+This repository contains the implementation of a creative system that outputs creative chess games by running a creative chess engine in selfplay.
+The chess engine is an extension to Stockfish that consists of trying to force Stockfish to play more, human deemed creative, moves.
 This project was made in the context of the _Computational Creativity_ course in my first master year in _computer science_ at [VUB](https://www.vub.be).
 
 The used stockfish version can be found [here](https://github.com/official-stockfish/Stockfish).
@@ -10,7 +10,7 @@ The chess database used by the creativity grading framework can be found [here](
 ## Installation
 
 ### 1. Cloning the repository
-The Stockfish code is added as a submodule. However, this repository contains a pre-built Stockfish [binary](extended-engine/binary/stockfish). This means that you do not need to also pull the Stockfish submodule to run the creative chess-engine.  
+The Stockfish code is added as a submodule. However, this repository contains a pre-built Stockfish [binary](extended-engine/binary/stockfish). This means that you do not need to also pull the Stockfish submodule to run the creative chess engine.  
 If you still want to, you can by pulling:
 * Through ssh:
 ```console
@@ -22,7 +22,7 @@ git clone --recurse-submodules https://github.com/wulfdewolf/creative-chess-engi
 ```
 
 ### 2. Building Stockfish
-To be able to run the creative chess-engine, the Stockfish engine must be built. 
+To be able to run the creative chess engine, the Stockfish engine must be built. 
 As mentioned above, the repository contains a pre-built Stockfish binary and thus you do not need to build it yourself.
 If for some reason the binary does not work for your system, build it yourself by following the instructions in the Stockfish [README](https://github.com/official-stockfish/Stockfish/blob/master/README.md).
 

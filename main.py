@@ -24,7 +24,7 @@ def main(argv):
     initial_weights_b = [10, 10, 2, 2, 2]
 
     # Evaluation thresholds: [c1, c2, c3, c4, o]
-    thresholds = [0.02, 0.0001, 0, 0.05, 0.8]
+    thresholds = [0.02, 0.001, 0, 0.05, 0.8]
 
     # Transformational creativity added weight
     added_weight = 0.2
