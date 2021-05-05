@@ -54,6 +54,7 @@ class CreativeChessEngine(ChessEngine):
                 self.counts[weight_index.value] += 1
 
             # Play it and return it
+            self.move_count += 1
             self.register_move(chosen_move)
             return chosen_move
 

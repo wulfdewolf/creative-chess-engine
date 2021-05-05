@@ -39,7 +39,7 @@ class ChessEngine:
             # Play it and return it
             self.move_count += 1
             self.register_move(chosen_move)
-            return chosen_move, chosen_move_score, 0, []
+            return chosen_move
 
         else:
             return False
