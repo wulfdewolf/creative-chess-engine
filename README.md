@@ -32,7 +32,7 @@ Run the following command to install the required python packages:
 pip install -r requirements.txt
 ```
 
-### 4. Running the creative system
+### 4. Running the creative chess system
 To run the creative system and produce chess games, navigate to the root folder of the repository and run:
 ```console
 python main.py -h
