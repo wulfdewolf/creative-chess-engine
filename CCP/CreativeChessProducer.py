@@ -21,23 +21,44 @@ class CreativeChessProducer:
 
     # Lets the two engines play a complete game
     def play_game(self):
+
+        # Reset position
+        self.current_position = chess.Board(chess.STARTING_FEN)
+        self.game = chess.pgn.Game()
+        self.move_count = 0
+        self.game_node = False
         
         # Prepare both engines to start a new game
         self.white_engine.new_game(chess.WHITE)
         self.black_engine.new_game(chess.BLACK)
     
-        while(not(self.white_engine.game_done())):
+        while(not(self.current_position.is_game_over(claim_draw=True))):
+
+            # Increase move count
+            self.move_count += 1
 
             # Let white engine play
-            move = self.white_engine.play_move()
-            self.black_engine.register_move(move)
+            move, indices = self.white_engine.play_move(self.current_position)
+            self.register_move(move, indices)
 
             # If the game isn't over
-            if(not(self.white_engine.game_done())):
+            if(not(self.current_position.is_game_over(claim_draw=True))):
 
                 # Let black engine play
-                move = self.black_engine.play_move()
-                self.white_engine.register_move(move)
+                move, indices = self.black_engine.play_move(self.current_position)
+                self.register_move(move, indices)
+
+    # Registers a played move
+    def register_move(self, move, indices):
+
+        # Push it to the position
+        self.current_position.push(move)
+
+        # Push it to the PGN game
+        self.game_node = self.game.add_variation(move) if isinstance(self.game_node, bool) else self.game_node.add_variation(move)
+        
+        # Add the indices as comment
+        self.game_node.comment = str(indices)
 
     # Run the CCP for a given number of games
     def run(self, N):
@@ -81,15 +102,13 @@ class CreativeChessProducer:
             except requests.exceptions.ConnectionError:
                 self.logger.info("Connection error occurred, skipped game.")
 
+
     # Returns for both engines a list that contains for each of the engine's weights: (a boolean that indicates if they achieved their threshold, the actual percentage, the threshold itself)
     def evaluate_game(self):
 
-        # Get move count from one of the engines (always the same)
-        move_count = self.white_engine.move_count
-
         # Calculate evaluations
-        white_evaluation = [((count / move_count) >= threshold, count / move_count, threshold)  for count, threshold in zip(self.white_engine.counts, self.thresholds)]
-        black_evaluation = [((count / move_count) >= threshold, count / move_count, threshold)  for count, threshold in zip(self.black_engine.counts, self.thresholds)]
+        white_evaluation = [((count / self.move_count) >= threshold, count / self.move_count, threshold)  for count, threshold in zip(self.white_engine.counts, self.thresholds)]
+        black_evaluation = [((count / self.move_count) >= threshold, count / self.move_count, threshold)  for count, threshold in zip(self.black_engine.counts, self.thresholds)]
         
         return white_evaluation, black_evaluation
 
@@ -101,12 +120,11 @@ class CreativeChessProducer:
         foldername = './games/game' + str(len(os.listdir('./games'))) 
         os.makedirs(foldername)
 
-        # Print the game to a pgn file in the folder
-        print(self.white_engine.game, file=open(foldername + "/game.pgn", "w"), end="\n\n")
+        # Store the weights in the event header
+        self.game.headers["Event"] = str(self.white_engine.weights) + str(self.black_engine.weights)
 
-        # Print the evaluation values to a txt file in the folder
-        print(
-            "Total number of moves: " + str(self.white_engine.move_count) + '\n' + 
-            "White move counts:     " + str(self.white_engine.counts) + '\n' +
-            "Black move counts:     " + str(self.black_engine.counts), 
-            file=open(foldername + "/evaluation.txt", "w"), end="\n\n")
+        # Store the counts in the site header
+        self.game.headers["Site"] = str(self.white_engine.counts) + str(self.black_engine.counts)
+
+        # Print the game to a pgn file in the folder
+        print(self.game, file=open(foldername + "/game.pgn", "w"), end="\n\n")

@@ -23,19 +23,19 @@ class CreativeChessEngine(ChessEngine):
         super(CreativeChessEngine, self).new_game(color)
 
     # Makes the engine play a move, applying it to the pgn and to the position
-    def play_move(self):
+    def play_move(self, current_position):
 
         # Check if it is the engine's turn
-        if(self.color == self.current_position.turn):
+        if(self.color == current_position.turn):
 
             # Get the optimality scores
-            optimality_scores = get_optimality_scores(self.current_position, self.inner_engine)
+            optimality_scores = get_optimality_scores(current_position, self.inner_engine)
 
             # Get the optimal move string
             optimal_move = max(optimality_scores, key = optimality_scores.get)
 
             # Get creativity indices
-            creativity_indices = get_creativity_indices(self.current_position)
+            creativity_indices = get_creativity_indices(current_position)
 
             # Merge the scores using the weights and sort
             hybrid_scores = self.get_hybrid_scores(optimality_scores, creativity_indices)
@@ -45,18 +45,19 @@ class CreativeChessEngine(ChessEngine):
             chosen_move = hybrid_scores[0][0]
             chosen_move_creativity_indices = creativity_indices.get(chosen_move)
 
+            # Build list that shows what kind of move it is
+            indices = [weight_index.value for weight_index in chosen_move_creativity_indices]
+
             # Increase the optimality counter
             if(optimal_move == chosen_move):
-                self.counts[4] += 1
+                indices.append(4)
 
             # Increase the creativity counters
-            for weight_index in chosen_move_creativity_indices:
-                self.counts[weight_index.value] += 1
+            for index in indices:
+                self.counts[index] += 1
 
             # Play it and return it
-            self.move_count += 1
-            self.register_move(chosen_move)
-            return chosen_move
+            return chosen_move, [indices]
 
         else:
             return False
