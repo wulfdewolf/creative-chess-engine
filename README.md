@@ -10,7 +10,7 @@ The chess database used by the creativity grading framework can be found [here](
 ## Installation
 
 ### 1. Cloning the repository
-The Stockfish code is added as a submodule. However, this repository contains a pre-built Stockfish [binary](extended-engine/binary/stockfish). This means that you do not need to also pull the Stockfish submodule to run the creative chess engine.  
+The Stockfish code is added as a submodule. However, this repository contains a pre-built Stockfish [binary](extended-engine/binary/stockfish). This means that you do not need to also pull the Stockfish submodule to run the creative chess system.  
 If you still want to, you can by pulling:
 * Through ssh:
 ```console
@@ -22,7 +22,7 @@ git clone --recurse-submodules https://github.com/wulfdewolf/creative-chess engi
 ```
 
 ### 2. Building Stockfish
-To be able to run the creative chess engine, the Stockfish engine must be built. 
+To be able to run the creative chess system, the Stockfish engine must be built. 
 As mentioned above, the repository contains a pre-built Stockfish binary and thus you do not need to build it yourself.
 If for some reason the binary does not work for your system, build it yourself by following the instructions in the Stockfish [README](https://github.com/official-stockfish/Stockfish/blob/master/README.md).
 
@@ -37,4 +37,4 @@ To run the creative system and produce chess games, navigate to the root folder 
 ```console
 python main.py -h
 ```
-When a game is accepted by the internal evaluation of the creative system, it is printed, in [PGN](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm) format, to a folder in the the [games folder](games/). The headers of the PGN format are used to store the evaluation values and the used weights, always in the following format: "[white][black]". Every move is also commented with an array that indicates how the engines classified the move. While the system is running its progress can be tracked in the **main.log** file. 
+When a game is accepted by the internal evaluation of the creative system, its [PGN](http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm) format is printed to a folder in the [games folder](games/). The headers of the PGN format are used to store the evaluation values and the used weights, always in the following format: "[white][black]". Every move is also commented with an array that indicates how the engines classified the move. While the system is running its progress can be tracked in the **main.log** file. 
