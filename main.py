@@ -24,7 +24,8 @@ def main(argv):
     initial_weights_b = [11, 11, 2, 2, 2]
 
     # Evaluation thresholds: [c1, c2, c3, c4, o]
-    thresholds = [0.06, 0.02, 0, 0.1, 0.8]
+    thresholds_w = [0.02, 0.02, 0, 0.1, 0.8]
+    thresholds_b = [0.02, 0.02, 0, 0.1, 0.8]
 
     # Transformational creativity added weight
     added_weight = 0.2
@@ -42,12 +43,13 @@ def main(argv):
     -w, --initial_weights_white    Initial weights for the white engine, default: {initial_weights_w} 
     -b, --initial_weights_black    Initial weights for the black engine, default: {initial_weights_b}
     -N                             Number of games the system should run, default: {N}
-    -t, --thresholds               Evaluation thresholds, default: {thresholds}
-    -a, --added_weight             Theta parameter that is added to the engine weights when a game is rejected, default: {added_weight}\n"""
+    --thresholds_white             Evaluation thresholds, default: {thresholds_w}
+    --thresholds_black             Evaluation thresholds, default: {thresholds_b}
+    -a, --added_weight             Theta parameter that is used to update the engine weights when a game is rejected, default: {added_weight}\n"""
 
     # Read optional input parameters
     try:
-        opts, args = getopt.getopt(argv,"hNw:b:t:a:",["initial_weights_white=","initial_weights_black=","thresholds=","added_weight="])
+        opts, args = getopt.getopt(argv,"hNw:b:a:",["initial_weights_white=","initial_weights_black=","thresholds_white=","thresholds_black=","added_weight="])
     except getopt.GetoptError:
         print(help)
         sys.exit(2)
@@ -62,8 +64,10 @@ def main(argv):
            initial_weights_w = [float(x) for x in arg.strip('[]').split(',')]
        elif opt in ('-b', "--initial_weights_black"):
            initial_weights_b = [float(x) for x in arg.strip('[]').split(',')]
-       elif opt in ("-t", "--thresholds"):
-           thresholds = [float(x) for x in arg.strip('[]').split(',')]
+       elif opt == "--thresholds_white"):
+           thresholds_w = [float(x) for x in arg.strip('[]').split(',')]
+       elif opt == "--thresholds_black"):
+           thresholds_b = [float(x) for x in arg.strip('[]').split(',')]
        elif opt in ("-a", "--added_weight"):
            added_weight = float(arg)
 
@@ -87,7 +91,7 @@ def main(argv):
     black_engine = CreativeChessEngine(stockfish, initial_weights_b)
 
     # Creative Chess Producer
-    ccp = CreativeChessProducer(white_engine, black_engine, thresholds, added_weight, logger)
+    ccp = CreativeChessProducer(white_engine, black_engine, thresholds_w, thresholds_b, added_weight, logger)
 
     try:
         # Let the engines play against each other for N games

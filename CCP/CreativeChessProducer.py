@@ -12,10 +12,11 @@ import os
 # Creative Chess Producer class
 class CreativeChessProducer:
 
-    def __init__(self, white_engine, black_engine, thresholds, added_weight, logger):
+    def __init__(self, white_engine, black_engine, thresholds_w, thresholds_b, added_weight, logger):
         self.white_engine = white_engine
         self.black_engine = black_engine
-        self.thresholds = thresholds
+        self.thresholds_w = thresholds_w
+        self.thresholds_b = thresholds_b
         self.added_weight = added_weight
         self.logger = logger
 
@@ -82,8 +83,7 @@ class CreativeChessProducer:
                 self.logger.info(str(self.black_engine.weights))
 
                 # Accept
-                if((all(achieved for achieved, _, _ in evaluation_white) and evaluation_black[4][0]) or
-                   (all(achieved for achieved, _, _ in evaluation_black) and evaluation_white[4][0])):
+                if(all(achieved for achieved, _, _ in evaluation_white) and all(achieved for achieved, _, _ in evaluation_black)):
 
                     self.logger.info("ACCEPT")
 
@@ -109,8 +109,8 @@ class CreativeChessProducer:
     def evaluate_game(self):
 
         # Calculate evaluations
-        white_evaluation = [((count / self.move_count) >= threshold, count / self.move_count, threshold)  for count, threshold in zip(self.white_engine.counts, self.thresholds)]
-        black_evaluation = [((count / self.move_count) >= threshold, count / self.move_count, threshold)  for count, threshold in zip(self.black_engine.counts, self.thresholds)]
+        white_evaluation = [((count / self.move_count) >= threshold, count / self.move_count, threshold)  for count, threshold in zip(self.white_engine.counts, self.thresholds_w)]
+        black_evaluation = [((count / self.move_count) >= threshold, count / self.move_count, threshold)  for count, threshold in zip(self.black_engine.counts, self.thresholds_b)]
         
         return white_evaluation, black_evaluation
 
@@ -127,6 +127,10 @@ class CreativeChessProducer:
 
         # Store the counts in the site header
         self.game.headers["Site"] = str(self.white_engine.counts) + str(self.black_engine.counts)
+
+        # Store the thresholds in the player headers
+        self.game.headers["White"] = str(self.thresholds_w)
+        self.game.headers["Black"] = str(self.thresholds_b)
 
         # Print the game to a pgn file in the folder
         print(self.game, file=open(foldername + "/game.pgn", "w"), end="\n\n")
