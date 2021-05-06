@@ -64,9 +64,9 @@ def main(argv):
            initial_weights_w = [float(x) for x in arg.strip('[]').split(',')]
        elif opt in ('-b', "--initial_weights_black"):
            initial_weights_b = [float(x) for x in arg.strip('[]').split(',')]
-       elif opt == "--thresholds_white"):
+       elif opt == "--thresholds_white":
            thresholds_w = [float(x) for x in arg.strip('[]').split(',')]
-       elif opt == "--thresholds_black"):
+       elif opt == "--thresholds_black":
            thresholds_b = [float(x) for x in arg.strip('[]').split(',')]
        elif opt in ("-a", "--added_weight"):
            added_weight = float(arg)
