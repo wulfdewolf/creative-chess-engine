@@ -99,7 +99,7 @@ class CreativeChessProducer:
                 i += 1
 
             # If a connection error occured, act as if the game never happened
-            except requests.exceptions.ConnectionError:
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
                 self.logger.info("Connection error occurred, skipped game.")
 
 
