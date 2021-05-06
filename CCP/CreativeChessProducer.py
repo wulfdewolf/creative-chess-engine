@@ -48,6 +48,7 @@ class CreativeChessProducer:
                 move, indices = self.black_engine.play_move(self.current_position)
                 self.register_move(move, indices)
 
+
     # Registers a played move
     def register_move(self, move, indices):
 
@@ -59,6 +60,7 @@ class CreativeChessProducer:
         
         # Add the indices as comment
         self.game_node.comment = str(indices)
+
 
     # Run the CCP for a given number of games
     def run(self, N):
