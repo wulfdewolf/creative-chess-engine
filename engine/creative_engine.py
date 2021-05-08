@@ -52,7 +52,6 @@ class CreativeChessEngine(ChessEngine):
             if(optimal_move == chosen_move):
                 indices.append(4)
 
-            print(indices)
             # Increase the creativity counters
             for index in indices:
                 self.counts[index] += 1

@@ -48,17 +48,6 @@ def is_known_move(move, known_moves):
             return known_move
     return False
 
-# Function that gets the value of a piece
-def get_piece_value(piece_type):
-    if(piece_type == 1):
-        return 1
-    elif(piece_type == 2 or piece_type == 3):
-        return 3
-    elif(piece_type == 4):
-        return 5
-    else:
-        return 9
-
 # Function that gets the captured piece type for a move that captures
 def get_captured_piece_square(board, move):
     if(board.is_en_passant(move)):
@@ -122,7 +111,7 @@ def get_creativity_indices(board):
     for capture in captures: 
 
         # Get captured piece value and store it in the captures list
-        capture_values.append(get_piece_value(board.piece_at(get_captured_piece_square(board, capture)).piece_type))
+        capture_values.append(board.piece_at(get_captured_piece_square(board, capture)).piece_type)
 
     # Loop over all allowed moves
     for move in legal_moves:
@@ -142,8 +131,8 @@ def get_creativity_indices(board):
 
         # 3. The move captures but there is a better capture
         if(board.is_capture(move)):
-            captured_piece_value = get_piece_value(board.piece_at(get_captured_piece_square(board, move)).piece_type)
-            if(not(all(i <= captured_piece_value for i in captures))):
+            captured_piece_type = board.piece_at(get_captured_piece_square(board, move)).piece_type
+            if(not(all(i <= captured_piece_type for i in capture_values))):
                 score_indices.append(WeightIndex.SUBOPTIMAL_CAPTURE)
 
         # 4. The move is a sacrifice
