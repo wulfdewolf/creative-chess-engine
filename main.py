@@ -49,7 +49,7 @@ def main(argv):
 
     # Read optional input parameters
     try:
-        opts, args = getopt.getopt(argv,"hNw:b:a:",["initial_weights_white=","initial_weights_black=","thresholds_white=","thresholds_black=","added_weight="])
+        opts, args = getopt.getopt(argv,"hN:w:b:a:",["initial_weights_white=","initial_weights_black=","thresholds_white=","thresholds_black=","added_weight="])
     except getopt.GetoptError:
         print(help)
         sys.exit(2)
