@@ -20,12 +20,12 @@ logger.addHandler(logging.FileHandler('main.log'))
 def main(argv):
 
     # Engine weights: [c1, c2, c3, c4, o]
-    initial_weights_w = [3, 3, 3, 3, 2]
-    initial_weights_b = [3, 3, 3, 3, 2]
+    initial_weights_w = [20, 3, 10, 3, 2]
+    initial_weights_b = [3, 20, 10, 3, 2]
 
     # Evaluation thresholds: [c1, c2, c3, c4, o]
-    thresholds_w = [0, 0.02, 0.1, 0.15, 0.8]
-    thresholds_b = [0.04, 0, 0.1, 0.15, 0.8]
+    thresholds_w = [0.04, 0, 0.1, 0.15, 0.75]
+    thresholds_b = [0, 0.02, 0.1, 0.15, 0.75]
 
     # Transformational creativity added weight
     added_weight = 0.2
