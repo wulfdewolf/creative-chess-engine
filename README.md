@@ -6,12 +6,22 @@ This project was made in the context of the _Computational Creativity_ course in
 The used stockfish version can be found [here](https://github.com/official-stockfish/Stockfish).
 The chess database used by the creativity grading framework can be found [here](https://www.chessdb.cn/cloudbookc_api_en.html).
 
+The slides of my final presentation are [here](documentation/presentation.pdf), the paper I wrote on the system can be found [here](documentation/paper.pdf).
+
+Underneath you can find my contact information.
+
+| ----------- | -----------  |
+| name        | Wolf De Wulf |
+| student id  | 0546395      |
+| email       | [wolf.de.wulf@vub.be](mailto:wolf.de.wulf@vub.be) |
+| linkedin    | https://www.linkedin.com/in/wolf-de-wulf/         |
+
 
 ## Installation
 
 ### 1. Cloning the repository
-The Stockfish code is added as a submodule. However, this repository contains a pre-built Stockfish [binary](extended-engine/binary/stockfish). This means that you do not need to also pull the Stockfish submodule to run the creative chess system.  
-If you still want to, you can by pulling:
+The Stockfish code is added as a submodule. However, this repository contains a pre-built Stockfish [binary](extended-engine/binary/stockfish). This means that you do not need to also clone the Stockfish submodule to run the creative chess system.  
+If you still want to, you can by cloning like this:
 * Through ssh:
 ```console
 git clone --recurse-submodules git@github.com:wulfdewolf/creative-chess engine.git
