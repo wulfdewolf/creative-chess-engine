@@ -10,7 +10,8 @@ The slides of my final presentation are [here](documentation/presentation.pdf), 
 
 Underneath you can find my contact information.
 
-| :---     | :---                          |
+| | | |
+|-|-|-|
 | name        | Wolf De Wulf |
 | student id  | 0546395      |
 | email       | [wolf.de.wulf@vub.be](mailto:wolf.de.wulf@vub.be) |
