@@ -1,10 +1,10 @@
-#-----------------------------------------------------------------
+# -----------------------------------------------------------------
 #
 #       Producing creative chess through chess engine selfplay
 #
 #                       author: Wolf De Wulf
 #
-#-----------------------------------------------------------------
+# -----------------------------------------------------------------
 import chess
 import chess.engine
 
@@ -17,7 +17,8 @@ def get_optimality_scores(board, engine):
 
     # Get scores for given board
     for el in board.legal_moves:
-        score_info = engine.analyse(board, chess.engine.Limit(time=.01), root_moves=[el])["score"]
+        score_info = engine.analyse(board, chess.engine.Limit(
+            time=.01), root_moves=[el])["score"]
 
         # Calculate score
         score = 0.0
@@ -29,7 +30,7 @@ def get_optimality_scores(board, engine):
             score = score_info.black().score(mate_score=1000000)
             if(score_info.black().is_mate()):
                 score -= score_info.black().mate() * 100
-        score = round(score/100,2)
+        score = round(score/100, 2)
 
         # Store in dict
         scores[el] = score

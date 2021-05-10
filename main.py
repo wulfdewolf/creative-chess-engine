@@ -1,22 +1,26 @@
-#-----------------------------------------------------------------
+# -----------------------------------------------------------------
 #
 #       Producing creative chess through chess-engine selfplay
 #
 #                       author: Wolf De Wulf
 #
-#-----------------------------------------------------------------
-import sys, getopt, signal
+# -----------------------------------------------------------------
+import sys
+import getopt
+import signal
 import logging
 import chess.engine
 from CCP.CreativeChessProducer import CreativeChessProducer
 from engine.creative_engine import CreativeChessEngine
 
 # Setup logger
-logger = logging.getLogger('main')
+logger = logging.getLogger("main")
 logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.FileHandler('main.log'))
+logger.addHandler(logging.FileHandler("main.log"))
 
 # Runs the creative system
+
+
 def main(argv):
 
     # Engine weights: [c1, c2, c3, c4, o]
@@ -49,30 +53,41 @@ def main(argv):
 
     # Read optional input parameters
     try:
-        opts, args = getopt.getopt(argv,"hN:w:b:a:",["initial_weights_white=","initial_weights_black=","thresholds_white=","thresholds_black=","added_weight="])
+        opts, args = getopt.getopt(
+            argv,
+            "hN:w:b:a:",
+            [
+                "initial_weights_white=",
+                "initial_weights_black=",
+                "thresholds_white=",
+                "thresholds_black=",
+                "added_weight=",
+            ],
+        )
     except getopt.GetoptError:
         print(help)
         sys.exit(2)
 
     for opt, arg in opts:
-       if opt == '-h':
-           print(help)
-           sys.exit()
-       elif opt == '-N':
-           N = int(arg)
-       elif opt in ('-w', "--initial_weights_white"):
-           initial_weights_w = [float(x) for x in arg.strip('[]').split(',')]
-       elif opt in ('-b', "--initial_weights_black"):
-           initial_weights_b = [float(x) for x in arg.strip('[]').split(',')]
-       elif opt == "--thresholds_white":
-           thresholds_w = [float(x) for x in arg.strip('[]').split(',')]
-       elif opt == "--thresholds_black":
-           thresholds_b = [float(x) for x in arg.strip('[]').split(',')]
-       elif opt in ("-a", "--added_weight"):
-           added_weight = float(arg)
+        if opt == "-h":
+            print(help)
+            sys.exit()
+        elif opt == "-N":
+            N = int(arg)
+        elif opt in ("-w", "--initial_weights_white"):
+            initial_weights_w = [float(x) for x in arg.strip("[]").split(",")]
+        elif opt in ("-b", "--initial_weights_black"):
+            initial_weights_b = [float(x) for x in arg.strip("[]").split(",")]
+        elif opt == "--thresholds_white":
+            thresholds_w = [float(x) for x in arg.strip("[]").split(",")]
+        elif opt == "--thresholds_black":
+            thresholds_b = [float(x) for x in arg.strip("[]").split(",")]
+        elif opt in ("-a", "--added_weight"):
+            added_weight = float(arg)
 
     # Stockfish instance
-    stockfish = chess.engine.SimpleEngine.popen_uci('./stockfish/binary/stockfish')
+    stockfish = chess.engine.SimpleEngine.popen_uci(
+        "./stockfish/binary/stockfish")
 
     # Signal handler to stop stockfish thread when soft kill occurs
     def signal_handler(sig, frame):
@@ -85,13 +100,15 @@ def main(argv):
 
     # Set signal handler
     signal.signal(signal.SIGINT, signal_handler)
-    
+
     # Engines
     white_engine = CreativeChessEngine(stockfish, initial_weights_w)
     black_engine = CreativeChessEngine(stockfish, initial_weights_b)
 
     # Creative Chess Producer
-    ccp = CreativeChessProducer(white_engine, black_engine, thresholds_w, thresholds_b, added_weight, logger)
+    ccp = CreativeChessProducer(
+        white_engine, black_engine, thresholds_w, thresholds_b, added_weight, logger
+    )
 
     try:
         # Let the engines play against each other for N games
@@ -102,5 +119,6 @@ def main(argv):
     # Stop stockfish
     stockfish.quit()
 
+
 if __name__ == "__main__":
-   main(sys.argv[1:])
+    main(sys.argv[1:])

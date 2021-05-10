@@ -1,17 +1,18 @@
-#-----------------------------------------------------------------
+# -----------------------------------------------------------------
 #
 #       Producing creative chess through chess engine selfplay
 #
 #                       author: Wolf De Wulf
 #
-#-----------------------------------------------------------------
+# -----------------------------------------------------------------
 import abc
 import chess
 import chess.pgn
 
 # Chess engine class
-class ChessEngine:
 
+
+class ChessEngine:
     def __init__(self, inner_engine):
         self.inner_engine = inner_engine
 
@@ -23,11 +24,15 @@ class ChessEngine:
     def play_move(self, current_position):
 
         # Check if it is the engine's turn
-        if(self.color == current_position.turn):
+        if self.color == current_position.turn:
 
             # Get the optimality score
-            optimality_scores = get_optimality_scores(current_position, self.normal_engine)
-            optimality_scores = sorted(optimality_scores.items(), key=lambda item: item[1], reverse=True)
+            optimality_scores = get_optimality_scores(
+                current_position, self.normal_engine
+            )
+            optimality_scores = sorted(
+                optimality_scores.items(), key=lambda item: item[1], reverse=True
+            )
 
             # Get the top move
             chosen_move = optimality_scores[0][0]
